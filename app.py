@@ -3,7 +3,7 @@ from port_scanner import port_scanner
 
 app = Flask(__name__)
 
-# ===== WELCOME PAGE =====
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -62,4 +62,4 @@ def portscan():
     return render_template("portscan.html", target=target, open_ports=open_ports)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
