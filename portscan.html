@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Port Scanner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>🔍 Port Scanner</h1>
+    <p>Scan open ports using Python Socket</p>
+</header>
+
+<div class="scan-container">
+
+    <!-- PORT SCAN FORM -->
+    <form method="POST" class="scan-form">
+        <input 
+            type="text" 
+            name="target" 
+            placeholder="Enter IP or Domain (example: 127.0.0.1)"
+            required
+        >
+        <button type="submit">Start Scan</button>
+    </form>
+
+    <!-- RESULT SECTION -->
+    {% if target %}
+        <div class="result-box">
+            <h3>Scan Results for: {{ target }}</h3>
+
+            {% if open_ports %}
+                <ul>
+                    {% for port in open_ports %}
+                        <li>Port {{ port }} is OPEN</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No open ports found.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+<footer>
+    <p>⚠️ Educational Use Only | Cybersecurity Toolkit</p>
+</footer>
+
+</body>
+</html>

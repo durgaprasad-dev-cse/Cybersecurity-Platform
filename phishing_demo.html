@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cyber Awareness Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- WELCOME -->
+    <div class="section welcome">
+        <h1>Welcome to Our Cyber Awareness Platform</h1>
+        <p>
+            This platform is designed to educate users about modern cyber threats,
+            safe online practices, and common attack techniques used by hackers.
+        </p>
+    </div>
+
+    <!-- PHISHING DEMO -->
+    <div class="section phishing">
+        <h2>Phishing Login Demonstration</h2>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Email address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+
+        <p style="font-size:14px; color:#6b7280;">
+            This is a simulated phishing page for awareness purposes only.
+        </p>
+    </div>
+
+    <!-- AWARENESS CONTENT -->
+    <div class="section awareness">
+        <h2>Why Phishing Is Dangerous</h2>
+        <p>
+            Phishing attacks impersonate trusted websites to steal sensitive
+            information. Always verify the URL, check HTTPS certificates,
+            and avoid clicking suspicious links.
+        </p>
+    </div>
+
+    <!-- RESULT -->
+    {% if captured %}
+    <div class="section result">
+        <h2>Captured Credentials (Simulation)</h2>
+        <p><strong>Email:</strong> {{ captured.username }}</p>
+        <p><strong>Password:</strong> {{ captured.password }}</p>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
