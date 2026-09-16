@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>URL & File Safety Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f1ff;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #1f2857;
+            margin-bottom: 10px;
+        }
+
+        .page-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .analyzer-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .analyzer-box h2 {
+            color: #51358f;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="url"],
+        .form-group input[type="file"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .analyze-button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #6337a6;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .analyze-button:hover {
+            opacity: 0.9;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #777;
+            font-weight: bold;
+        }
+
+        /* =====================================================
+           SECURITY REPORT
+        ===================================================== */
+
+        .security-report {
+            margin-top: 35px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .security-report h2 {
+            color: #1f2857;
+            margin-bottom: 25px;
+        }
+
+        /* =====================================================
+           VERDICT
+        ===================================================== */
+
+        .verdict {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .verdict-danger {
+            background: #ffdede;
+            color: #b00020;
+        }
+
+        .verdict-warning {
+            background: #fff0c7;
+            color: #9a6200;
+        }
+
+        .verdict-safe {
+            background: #dff7e5;
+            color: #087f3f;
+        }
+
+        .verdict-unknown {
+            background: #e8e8e8;
+            color: #555555;
+        }
+
+        /* =====================================================
+           REPORT GRID
+        ===================================================== */
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+            gap: 18px;
+        }
+
+        .report-card {
+            padding: 20px;
+            border: 1px solid #ddd8ed;
+            border-radius: 15px;
+            background: #faf9ff;
+        }
+
+        .report-card h3 {
+            margin-bottom: 8px;
+            color: #51358f;
+        }
+
+        .report-card p {
+            word-break: break-word;
+        }
+
+        /* =====================================================
+           VIRUSTOTAL
+        ===================================================== */
+
+        .vt-section {
+            margin-top: 35px;
+            padding: 25px;
+            border-radius: 18px;
+            background: #f7f5ff;
+            border: 1px solid #ddd8ed;
+        }
+
+        .detection-summary {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
+
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detection-summary div {
+            padding: 20px;
+            border-radius: 14px;
+            background: #ffffff;
+            text-align: center;
+        }
+
+        .detection-summary strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .detection-summary span {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .danger-number {
+            color: #d00000;
+        }
+
+        .warning-number {
+            color: #d17a00;
+        }
+
+        .safe-number {
+            color: #087f3f;
+        }
+
+        /* =====================================================
+           VENDOR TABLE
+        ===================================================== */
+
+        .vendor-box {
+            margin-top: 25px;
+        }
+
+        .vendor-table {
+            margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ddd8ed;
+        }
+
+        .vendor-row {
+            display: grid;
+            grid-template-columns:
+                1.5fr 1fr 1.5fr;
+
+            gap: 15px;
+            padding: 15px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e0ef;
+        }
+
+        .vendor-row:last-child {
+            border-bottom: none;
+        }
+
+        .vendor-row strong {
+            color: #b00020;
+        }
+
+        /* =====================================================
+           INDICATORS
+        ===================================================== */
+
+        .indicator-box {
+            margin-top: 25px;
+            padding: 25px;
+            border-left: 5px solid #d17a00;
+            background: #fff8e6;
+            border-radius: 12px;
+        }
+
+        .indicator-box li {
+            margin: 10px 0;
+        }
+
+        /* =====================================================
+           RECOMMENDATION
+        ===================================================== */
+
+        .recommendation-box {
+            margin-top: 25px;
+            padding: 25px;
+            border-left: 5px solid #6337a6;
+            background: #ffffff;
+            border-radius: 12px;
+        }
+
+        .recommendation-box p {
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           UNKNOWN
+        ===================================================== */
+
+        .unknown-box {
+            padding: 20px;
+            background: #eeeeee;
+            border-radius: 12px;
+            color: #555555;
+        }
+
+        /* =====================================================
+           DISCLAIMER
+        ===================================================== */
+
+        .disclaimer {
+            margin-top: 25px;
+            padding: 18px;
+            background: #fff7df;
+            border: 1px solid #ead28a;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 25px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            background: #1f2857;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .vendor-row {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <a href="{{ url_for('index') }}"
+       class="back-button">
+        ← Back to Cybersecurity Toolkit
+    </a>
+
+
+    <h1 class="page-title">
+        🛡️ URL & File Safety Analyzer
+    </h1>
+
+    <p class="page-description">
+        Analyze URLs and uploaded files for suspicious
+        indicators and available threat intelligence.
+    </p>
+
+
+    <!-- =====================================================
+         URL ANALYZER
+    ====================================================== -->
+
+    <div class="analyzer-box">
+
+        <h2>🔗 Analyze a URL</h2>
+
+        <form method="POST">
+
+            <input type="hidden"
+                   name="analysis_type"
+                   value="url">
+
+            <div class="form-group">
+
+                <label for="url">
+                    Enter URL
+                </label>
+
+                <input
+                    type="url"
+                    id="url"
+                    name="url"
+                    placeholder="https://www.instagram.com"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="analyze-button">
+
+                🔍 Analyze URL
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILE ANALYZER
+    ====================================================== -->
+
+    <div class="analyzer-box">
+
+        <h2>📁 Analyze a File</h2>
+
+        <form
+            method="POST"
+            enctype="multipart/form-data">
+
+            <input type="hidden"
+                   name="analysis_type"
+                   value="file">
+
+            <div class="form-group">
+
+                <label for="file">
+                    Select a file
+                </label>
+
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="analyze-button">
+
+                🔍 Analyze File
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         SECURITY REPORT
+    ====================================================== -->
+
+    {% if result %}
+
+    <div class="security-report">
+
+        <h2>
+            🔐 Security Analysis Report
+        </h2>
+
+
+        <!-- =================================================
+             VERDICT
+        ================================================== -->
+
+        {% if result.risk_level == "MALICIOUS / PHISHING" %}
+
+            <div class="verdict verdict-danger">
+                🔴 {{ result.risk_level }}
+            </div>
+
+        {% elif result.risk_level == "SUSPICIOUS" %}
+
+            <div class="verdict verdict-warning">
+                🟠 {{ result.risk_level }}
+            </div>
+
+        {% elif result.risk_level == "SAFE / CLEAN" %}
+
+            <div class="verdict verdict-safe">
+                🟢 {{ result.risk_level }}
+            </div>
+
+        {% else %}
+
+            <div class="verdict verdict-unknown">
+                ⚪ {{ result.risk_level }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             BASIC INFORMATION
+        ================================================== -->
+
+        <div class="report-grid">
+
+            <div class="report-card">
+
+                <h3>🌐 URL</h3>
+
+                <p>
+                    {{ result.url }}
+                </p>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <h3>🏠 Domain</h3>
+
+                <p>
+                    {{ result.domain }}
+                </p>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <h3>🔌 Protocol</h3>
+
+                <p>
+                    {{ result.protocol }}
+                </p>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <h3>📊 Risk Score</h3>
+
+                <p>
+                    {{ result.risk_score }}
+                </p>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <h3>🔒 HTTPS</h3>
+
+                <p>
+                    {% if result.https %}
+                        Detected
+                    {% else %}
+                        Not detected
+                    {% endif %}
+                </p>
+
+            </div>
+
+
+            <div class="report-card">
+
+                <h3>💻 IP Address</h3>
+
+                <p>
+                    {% if result.ip_address %}
+                        Yes
+                    {% else %}
+                        No
+                    {% endif %}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             VIRUSTOTAL
+        ================================================== -->
+
+        <div class="vt-section">
+
+            <h2>
+                🦠 VirusTotal Threat Intelligence
+            </h2>
+
+
+            {% if result.vt_available %}
+
+                <p>
+                    VirusTotal Verdict:
+                    <strong>
+                        {{ result.vt_verdict }}
+                    </strong>
+                </p>
+
+
+                <div class="detection-summary">
+
+                    <div>
+
+                        <strong>
+                            🔴 Malicious
+                        </strong>
+
+                        <span class="danger-number">
+                            {{ result.vt_malicious }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            🟠 Suspicious
+                        </strong>
+
+                        <span class="warning-number">
+                            {{ result.vt_suspicious }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            🟢 Harmless
+                        </strong>
+
+                        <span class="safe-number">
+                            {{ result.vt_harmless }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ⚪ Undetected
+                        </strong>
+
+                        <span>
+                            {{ result.vt_undetected }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ⏱️ Timeout
+                        </strong>
+
+                        <span>
+                            {{ result.vt_timeout }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     SECURITY VENDORS
+                ========================================== -->
+
+                <div class="vendor-box">
+
+                    <h3>
+                        🛡️ Security Vendor Detections
+                    </h3>
+
+
+                    {% if result.vendor_detections %}
+
+                        <div class="vendor-table">
+
+                            {% for detection in result.vendor_detections %}
+
+                                <div class="vendor-row">
+
+                                    <div>
+                                        <strong>
+                                            {{ detection.vendor }}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        {{ detection.category }}
+                                    </div>
+
+                                    <div>
+                                        {{ detection.result }}
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <p>
+                            No malicious or suspicious vendor
+                            detections were returned.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="unknown-box">
+
+                    <strong>
+                        VirusTotal data unavailable.
+                    </strong>
+
+                    <p>
+                        {{ result.vt_message }}
+                    </p>
+
+                    <p>
+                        The application will use local URL
+                        analysis when possible.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             LOCAL INDICATORS
+        ================================================== -->
+
+        {% if result.indicators %}
+
+        <div class="indicator-box">
+
+            <h3>
+                ⚠️ Detected Local Indicators
+            </h3>
+
+            <ul>
+
+                {% for indicator in result.indicators %}
+
+                    <li>
+                        {{ indicator }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             SUSPICIOUS KEYWORDS
+        ================================================== -->
+
+        {% if result.found_keywords %}
+
+        <div class="indicator-box">
+
+            <h3>
+                🔎 Suspicious Keywords
+            </h3>
+
+            <p>
+                {{ result.found_keywords | join(", ") }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             RECOMMENDATION
+        ================================================== -->
+
+        <div class="recommendation-box">
+
+            <h3>
+                💡 Security Recommendation
+            </h3>
+
+            <p>
+                {{ result.recommendation }}
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             DISCLAIMER
+        ================================================== -->
+
+        <div class="disclaimer">
+
+            <strong>
+                ⚠️ Important:
+            </strong>
+
+            This analyzer combines local URL analysis with
+            available VirusTotal threat intelligence.
+            A clean or undetected result does not guarantee
+            that a URL is completely safe. Always verify the
+            source before opening links or entering sensitive
+            information.
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
