@@ -102,6 +102,176 @@ It demonstrates fundamental concepts related to:
 
 ---
 
+
+### 6. 🔎 URL & File Safety Analyzer
+
+The URL & File Safety Analyzer is one of the main security-analysis features of the platform.
+
+It provides two analysis modes:
+
+URL Analysis
+     +
+File Analysis
+🌍 URL Analysis
+
+Users can submit a URL for security analysis.
+
+The analyzer examines the submitted URL and can combine:
+
+Local URL Analysis
+
+The application checks characteristics such as:
+
+HTTPS usage
+IP-address-based URLs
+Suspicious keywords
+URL length
+Encoded characters
+Suspicious URL patterns
+JavaScript-related patterns
+Excessive subdomains
+The @ character in URLs
+
+These checks are useful for identifying suspicious URL characteristics.
+
+However, URL structure alone cannot determine whether a website is genuinely malicious.
+
+🦠 VirusTotal Integration
+
+To improve URL analysis, the platform integrates with the VirusTotal API.
+
+VirusTotal provides threat-intelligence information gathered from multiple security engines and services.
+
+The application sends the URL to VirusTotal and retrieves its available analysis information.
+
+The resulting information can include:
+
+Malicious detections
+Suspicious detections
+Harmless detections
+Undetected results
+Security-vendor detections
+Overall analysis verdict
+
+The application then presents the result through its own security-report interface instead of simply redirecting users to an external security website.
+
+Example workflow
+User enters URL
+       ↓
+Flask receives URL
+       ↓
+Local URL analysis
+       ↓
+VirusTotal API request
+       ↓
+Threat intelligence response
+       ↓
+Result processing
+       ↓
+Security report
+       ↓
+User sees verdict
+🧠 URL Risk Classification
+
+The application can display classifications such as:
+
+MALICIOUS / PHISHING
+SUSPICIOUS
+SAFE / CLEAN
+UNDETECTED
+UNKNOWN
+Example
+
+A URL with multiple security-vendor detections can be reported as:
+
+MALICIOUS / PHISHING
+
+while a URL with no reported malicious detections may be presented as:
+
+SAFE / CLEAN
+
+However, a clean or undetected result should not be interpreted as an absolute guarantee that a website is safe.
+
+Threat intelligence changes over time, and no automated scanner can guarantee that every malicious URL will be detected.
+
+📄 File Safety Analysis
+
+The platform also allows users to upload supported files for analysis.
+
+The application:
+
+File Upload
+     ↓
+Validate file extension
+     ↓
+Generate temporary filename
+     ↓
+Save temporarily
+     ↓
+Analyze file
+     ↓
+Generate security information
+     ↓
+Delete temporary file
+
+The application can collect information such as:
+
+Original filename
+File extension
+File size
+SHA-256 hash
+Security indicators
+Risk classification
+
+Temporary uploaded files are removed after processing.
+
+🔐 SHA-256 File Hashing
+
+The file analyzer can calculate a SHA-256 hash for an uploaded file.
+
+A hash acts as a digital fingerprint of the file.
+
+For example:
+
+File
+ ↓
+SHA-256 algorithm
+ ↓
+Unique hash
+
+If the file contents change, its SHA-256 hash will also change.
+
+This concept is commonly used in cybersecurity for:
+
+File identification
+Malware research
+Integrity verification
+Threat intelligence
+Incident investigation
+🧩 Supported File Types
+
+The current application supports selected file extensions including:
+
+.apk
+.pdf
+.zip
+.txt
+.doc
+.docx
+.jpg
+.jpeg
+.png
+.exe
+.dll
+.bat
+.cmd
+.js
+.vbs
+.ps1
+.sh
+
+The application validates the extension before processing the uploaded file.
+
 ## 🛠️ Technologies Used
 
 ### Frontend
