@@ -86,19 +86,26 @@ Default generated password length:
 
 ---
 
-### 5. 🌐 Port Scanner
+## 5. 🔎 Port Scanner
 
-A basic educational port-scanning utility implemented in Python.
+The Port Scanner performs a TCP connection scan against a specified
+hostname or IP address.
 
-It demonstrates fundamental concepts related to:
+### Features
 
-- Network ports
-- TCP connections
-- Open and closed ports
-- Network security
-- Basic reconnaissance
+- Scans TCP ports from 1 to 1024 by default
+- Uses concurrent scanning for faster results
+- Applies a connection timeout to prevent indefinite waiting
+- Resolves hostnames before scanning
+- Displays detected open ports in numerical order
+- Handles unreachable or invalid targets gracefully
 
-> Use the port scanner only on systems you own or have explicit permission to test.
+### Example
+
+Enter a target such as:
+
+```text
+127.0.0.1
 
 ---
 
