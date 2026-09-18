@@ -1,27 +1,94 @@
-import base64
 import os
 import re
+import time
+import base64
 from urllib.parse import urlparse
 
 import requests
 
 
-# ============================================================
+# =========================================================
 # VIRUSTOTAL CONFIGURATION
-# ============================================================
+# =========================================================
 
 VT_API_URL = "https://www.virustotal.com/api/v3"
 
+REQUEST_TIMEOUT = 15
 
-# ============================================================
-# CREATE VIRUSTOTAL URL ID
-# ============================================================
+# Do not make the user wait too long.
+ANALYSIS_WAIT_SECONDS = 20
+
+# Poll every 2 seconds.
+POLL_INTERVAL = 2
+
+
+# =========================================================
+# PHISHING KEYWORDS
+# =========================================================
+
+PHISHING_KEYWORDS = [
+    "login",
+    "signin",
+    "sign-in",
+    "verify",
+    "verification",
+    "secure",
+    "security",
+    "account",
+    "update",
+    "confirm",
+    "password",
+    "credential",
+    "authenticate",
+    "authentication",
+    "wallet",
+    "payment",
+    "billing",
+    "banking",
+    "recover",
+    "unlock",
+    "suspended",
+    "urgent",
+    "alert",
+    "support",
+    "reset"
+]
+
+
+# =========================================================
+# COMMONLY IMPERSONATED BRANDS
+# =========================================================
+
+COMMON_BRANDS = [
+    "paypal",
+    "microsoft",
+    "office365",
+    "outlook",
+    "google",
+    "gmail",
+    "apple",
+    "icloud",
+    "amazon",
+    "facebook",
+    "instagram",
+    "whatsapp",
+    "linkedin",
+    "netflix",
+    "dropbox",
+    "docusign",
+    "adobe",
+    "github",
+    "steam",
+    "coinbase",
+    "binance"
+]
+
+
+# =========================================================
+# URL ID
+# =========================================================
 
 def create_url_id(url):
-    """
-    Convert a URL into the ID format required by
-    the VirusTotal URL report API.
-    """
 
     encoded = base64.urlsafe_b64encode(
         url.encode("utf-8")
@@ -30,642 +97,1474 @@ def create_url_id(url):
     return encoded.rstrip("=")
 
 
-# ============================================================
-# GET VIRUSTOTAL REPORT
-# ============================================================
+# =========================================================
+# API KEY
+# =========================================================
 
-def get_virustotal_report(url):
-    """
-    Ask VirusTotal whether it already has a report
-    for the supplied URL.
-    """
+def get_api_key():
 
-    api_key = os.getenv("VIRUSTOTAL_API_KEY")
-
-    if not api_key:
-        return {
-            "available": False,
-            "status": "NO_API_KEY",
-            "message": "VirusTotal API key is not configured."
-        }
-
-    url_id = create_url_id(url)
-
-    endpoint = f"{VT_API_URL}/urls/{url_id}"
-
-    headers = {
-        "x-apikey": api_key
-    }
-
-    try:
-        response = requests.get(
-            endpoint,
-            headers=headers,
-            timeout=15
-        )
-
-        # ----------------------------------------------------
-        # Existing VirusTotal report
-        # ----------------------------------------------------
-
-        if response.status_code == 200:
-            return {
-                "available": True,
-                "status": "OK",
-                "data": response.json()
-            }
-
-        # ----------------------------------------------------
-        # URL not found in VirusTotal
-        # ----------------------------------------------------
-
-        if response.status_code == 404:
-            return {
-                "available": False,
-                "status": "NOT_FOUND",
-                "message": "VirusTotal does not currently have a report for this URL."
-            }
-
-        # ----------------------------------------------------
-        # API rate limit
-        # ----------------------------------------------------
-
-        if response.status_code == 429:
-            return {
-                "available": False,
-                "status": "RATE_LIMITED",
-                "message": "VirusTotal API rate limit reached."
-            }
-
-        # ----------------------------------------------------
-        # Invalid API key / permission problem
-        # ----------------------------------------------------
-
-        if response.status_code in (401, 403):
-            return {
-                "available": False,
-                "status": "AUTH_ERROR",
-                "message": "VirusTotal API key is invalid or does not have permission."
-            }
-
-        # ----------------------------------------------------
-        # Other API error
-        # ----------------------------------------------------
-
-        return {
-            "available": False,
-            "status": "API_ERROR",
-            "message": f"VirusTotal returned HTTP {response.status_code}."
-        }
-
-    except requests.exceptions.Timeout:
-        return {
-            "available": False,
-            "status": "TIMEOUT",
-            "message": "Connection to VirusTotal timed out."
-        }
-
-    except requests.exceptions.RequestException as error:
-        return {
-            "available": False,
-            "status": "REQUEST_ERROR",
-            "message": f"VirusTotal request failed: {error}"
-        }
+    return os.getenv("VIRUSTOTAL_API_KEY")
 
 
-# ============================================================
-# PARSE VIRUSTOTAL RESULT
-# ============================================================
-
-def parse_virustotal_report(data):
-    """
-    Extract useful information from the VirusTotal API response.
-    """
-
-    try:
-        attributes = data["data"]["attributes"]
-
-        stats = attributes.get(
-            "last_analysis_stats",
-            {}
-        )
-
-        results = attributes.get(
-            "last_analysis_results",
-            {}
-        )
-
-        malicious = stats.get("malicious", 0)
-        suspicious = stats.get("suspicious", 0)
-        harmless = stats.get("harmless", 0)
-        undetected = stats.get("undetected", 0)
-        timeout = stats.get("timeout", 0)
-
-        vendor_detections = []
-
-        for vendor_name, vendor_data in results.items():
-
-            category = vendor_data.get(
-                "category",
-                ""
-            )
-
-            result = vendor_data.get(
-                "result"
-            )
-
-            if category in ("malicious", "suspicious"):
-
-                vendor_detections.append({
-                    "vendor": vendor_name,
-                    "category": category,
-                    "result": result or "Detection reported"
-                })
-
-        # Put malicious detections first
-        vendor_detections.sort(
-            key=lambda item: (
-                0 if item["category"] == "malicious" else 1,
-                item["vendor"].lower()
-            )
-        )
-
-        # ----------------------------------------------------
-        # Determine VirusTotal verdict
-        # ----------------------------------------------------
-
-        if malicious > 0:
-            verdict = "MALICIOUS"
-
-        elif suspicious > 0:
-            verdict = "SUSPICIOUS"
-
-        elif harmless > 0:
-            verdict = "CLEAN"
-
-        else:
-            verdict = "UNDETECTED"
-
-        return {
-            "verdict": verdict,
-            "malicious": malicious,
-            "suspicious": suspicious,
-            "harmless": harmless,
-            "undetected": undetected,
-            "timeout": timeout,
-            "vendor_detections": vendor_detections
-        }
-
-    except (KeyError, TypeError, AttributeError):
-        return {
-            "verdict": "UNKNOWN",
-            "malicious": 0,
-            "suspicious": 0,
-            "harmless": 0,
-            "undetected": 0,
-            "timeout": 0,
-            "vendor_detections": []
-        }
-
-
-# ============================================================
+# =========================================================
 # LOCAL URL ANALYSIS
-# ============================================================
+# =========================================================
 
 def local_url_analysis(url):
 
-    parsed = urlparse(url)
+    indicators = []
+    phishing_indicators = []
+    suspicious_patterns = []
 
-    hostname = parsed.hostname or ""
+    score = 0
+
+    parsed = urlparse(url)
 
     scheme = parsed.scheme.lower()
 
-    path = parsed.path or ""
+    hostname = parsed.hostname or ""
 
-    query = parsed.query or ""
+    hostname_lower = hostname.lower()
 
-    full_url = url.lower()
+    full_url_lower = url.lower()
 
-    indicators = []
 
-    suspicious_keywords = [
-        "login",
-        "verify",
-        "verification",
-        "account",
-        "password",
-        "update",
-        "secure",
-        "security",
-        "confirm",
-        "bank",
-        "wallet",
-        "free",
-        "reward",
-        "prize",
-        "claim"
-    ]
+    # =====================================================
+    # HTTP / HTTPS
+    # =====================================================
 
-    # --------------------------------------------------------
-    # HTTPS
-    # --------------------------------------------------------
+    if scheme == "https":
 
-    https = scheme == "https"
-
-    if not https:
         indicators.append(
-            "The URL does not use HTTPS."
+            "HTTPS is enabled. This encrypts the connection, "
+            "but HTTPS alone does not prove that the website is safe."
         )
 
-    # --------------------------------------------------------
-    # IP address instead of domain
-    # --------------------------------------------------------
+    elif scheme == "http":
 
-    ip_address = False
+        indicators.append(
+            "HTTP is being used. The connection is not encrypted."
+        )
 
-    try:
-        import ipaddress
+        score += 1
 
-        if hostname:
-            ipaddress.ip_address(hostname)
-            ip_address = True
+    else:
 
-            indicators.append(
-                "The URL uses an IP address instead of a normal domain name."
-            )
+        indicators.append(
+            "The URL does not use HTTP or HTTPS."
+        )
 
-    except ValueError:
-        ip_address = False
+        score += 3
 
-    # --------------------------------------------------------
-    # Suspicious keywords
-    # --------------------------------------------------------
+
+    # =====================================================
+    # IP ADDRESS
+    # =====================================================
+
+    ip_pattern = re.compile(
+        r"^(?:\d{1,3}\.){3}\d{1,3}$"
+    )
+
+    if ip_pattern.match(hostname):
+
+        suspicious_patterns.append(
+            "The URL uses an IP address instead of a domain name."
+        )
+
+        score += 2
+
+
+    # =====================================================
+    # @ SYMBOL
+    # =====================================================
+
+    if "@" in url:
+
+        suspicious_patterns.append(
+            "The URL contains an '@' character."
+        )
+
+        score += 3
+
+
+    # =====================================================
+    # VERY LONG URL
+    # =====================================================
+
+    if len(url) > 150:
+
+        suspicious_patterns.append(
+            "The URL is unusually long."
+        )
+
+        score += 1
+
+
+    # =====================================================
+    # MANY SUBDOMAINS
+    # =====================================================
+
+    if hostname.count(".") >= 4:
+
+        suspicious_patterns.append(
+            "The domain contains many subdomain levels."
+        )
+
+        score += 2
+
+
+    # =====================================================
+    # MANY ENCODED CHARACTERS
+    # =====================================================
+
+    encoded_count = len(
+        re.findall(
+            r"%[0-9a-fA-F]{2}",
+            url
+        )
+    )
+
+    if encoded_count >= 5:
+
+        suspicious_patterns.append(
+            "The URL contains many encoded characters."
+        )
+
+        score += 2
+
+
+    # =====================================================
+    # PUNYCODE
+    # =====================================================
+
+    if "xn--" in hostname_lower:
+
+        suspicious_patterns.append(
+            "The domain uses Punycode/IDN encoding."
+        )
+
+        score += 2
+
+
+    # =====================================================
+    # MANY HYPHENS
+    # =====================================================
+
+    if hostname.count("-") >= 3:
+
+        suspicious_patterns.append(
+            "The domain contains several hyphens."
+        )
+
+        score += 1
+
+
+    # =====================================================
+    # PHISHING KEYWORDS
+    # =====================================================
 
     found_keywords = []
 
-    for keyword in suspicious_keywords:
+    for keyword in PHISHING_KEYWORDS:
 
-        if keyword in full_url:
+        if keyword in full_url_lower:
 
             found_keywords.append(keyword)
 
     if found_keywords:
 
-        indicators.append(
-            "Suspicious keywords detected: "
-            + ", ".join(found_keywords)
+        for keyword in found_keywords[:10]:
+
+            phishing_indicators.append(
+                f"Phishing-related keyword detected: '{keyword}'."
+            )
+
+        score += min(
+            len(found_keywords),
+            4
         )
 
-    # --------------------------------------------------------
-    # @ symbol
-    # --------------------------------------------------------
 
-    if "@" in full_url:
+    # =====================================================
+    # BRAND IMPERSONATION
+    # =====================================================
 
-        indicators.append(
-            "The URL contains an @ symbol."
+    detected_brands = []
+
+    for brand in COMMON_BRANDS:
+
+        if brand in hostname_lower:
+
+            detected_brands.append(brand)
+
+    if detected_brands:
+
+        for brand in detected_brands:
+
+            phishing_indicators.append(
+                f"The hostname contains the brand name '{brand}'."
+            )
+
+        score += 3
+
+
+    # =====================================================
+    # BRAND + PHISHING KEYWORD
+    # =====================================================
+
+    if detected_brands and found_keywords:
+
+        phishing_indicators.append(
+            "A commonly impersonated brand appears together "
+            "with phishing-related terminology."
         )
 
-    # --------------------------------------------------------
-    # Very long URL
-    # --------------------------------------------------------
+        score += 3
 
-    if len(url) > 150:
 
-        indicators.append(
-            "The URL is unusually long."
-        )
+    # =====================================================
+    # CREDENTIAL PATH
+    # =====================================================
 
-    # --------------------------------------------------------
-    # Encoded characters
-    # --------------------------------------------------------
-
-    if "%" in full_url:
-
-        indicators.append(
-            "The URL contains encoded characters."
-        )
-
-    # --------------------------------------------------------
-    # Possible script/code patterns
-    # --------------------------------------------------------
-
-    suspicious_patterns = [
-        "javascript:",
-        "<script",
-        "%3cscript",
-        "data:text/html",
-        "vbscript:",
-        "onerror=",
-        "onload="
+    credential_terms = [
+        "login",
+        "signin",
+        "verify",
+        "password",
+        "credential",
+        "authenticate",
+        "account"
     ]
 
-    found_patterns = []
+    credential_matches = []
 
-    for pattern in suspicious_patterns:
+    for term in credential_terms:
 
-        if pattern in full_url:
+        if term in parsed.path.lower():
 
-            found_patterns.append(pattern)
+            credential_matches.append(term)
 
-    if found_patterns:
+    if credential_matches:
 
-        indicators.append(
-            "Potentially dangerous URL patterns detected: "
-            + ", ".join(found_patterns)
+        phishing_indicators.append(
+            "The URL path contains account or credential-related terms."
         )
 
-    # --------------------------------------------------------
-    # Many subdomains
-    # --------------------------------------------------------
+        score += 2
 
-    domain_parts = hostname.split(".")
 
-    if len(domain_parts) >= 5:
+    # =====================================================
+    # QUERY STRING
+    # =====================================================
 
-        indicators.append(
-            "The domain contains an unusually large number of subdomains."
+    if len(parsed.query) > 100:
+
+        suspicious_patterns.append(
+            "The URL contains a large query string."
         )
 
-    # --------------------------------------------------------
-    # Calculate local risk score
-    # --------------------------------------------------------
+        score += 1
 
-    risk_score = 0
 
-    if not https:
-        risk_score += 1
+    # =====================================================
+    # LOCAL VERDICT
+    # =====================================================
 
-    if ip_address:
-        risk_score += 2
+    if phishing_indicators:
 
-    if found_keywords:
-        risk_score += len(found_keywords)
+        if score >= 8:
 
-    if "@" in full_url:
-        risk_score += 2
+            verdict = "HIGH RISK"
 
-    if len(url) > 150:
-        risk_score += 1
+        else:
 
-    if "%" in full_url:
-        risk_score += 1
+            verdict = "SUSPICIOUS"
 
-    if found_patterns:
-        risk_score += 4
+    elif score >= 6:
 
-    if len(domain_parts) >= 5:
-        risk_score += 2
+        verdict = "SUSPICIOUS"
 
-    if risk_score >= 6:
+    elif score >= 3:
 
-        local_risk = "HIGH RISK"
-
-    elif risk_score >= 3:
-
-        local_risk = "SUSPICIOUS"
+        verdict = "LOW RISK"
 
     else:
 
-        local_risk = "LOW RISK"
+        verdict = "NO OBVIOUS RISK"
+
 
     return {
-        "hostname": hostname,
-        "scheme": scheme,
-        "https": https,
-        "ip_address": ip_address,
-        "risk_score": risk_score,
-        "local_risk": local_risk,
-        "found_keywords": found_keywords,
+        "score": score,
+        "verdict": verdict,
         "indicators": indicators,
-        "path": path,
-        "query": query
+        "phishing_indicators": phishing_indicators,
+        "suspicious_patterns": suspicious_patterns,
+        "https": scheme == "https",
+        "http": scheme == "http",
+        "hostname": hostname
     }
 
 
-# ============================================================
-# MAIN URL ANALYZER
-# ============================================================
+# =========================================================
+# SUBMIT URL TO VIRUSTOTAL
+# =========================================================
+
+def submit_url_to_virustotal(url):
+
+    api_key = get_api_key()
+
+    if not api_key:
+
+        return {
+            "success": False,
+            "error": "VirusTotal API key is not configured."
+        }
+
+
+    headers = {
+        "accept": "application/json",
+        "x-apikey": api_key,
+        "content-type": "application/x-www-form-urlencoded"
+    }
+
+
+    try:
+
+        response = requests.post(
+            f"{VT_API_URL}/urls",
+            headers=headers,
+            data={
+                "url": url
+            },
+            timeout=REQUEST_TIMEOUT
+        )
+
+
+        if response.status_code == 200:
+
+            data = response.json()
+
+            analysis_id = (
+                data
+                .get("data", {})
+                .get("id")
+            )
+
+            if analysis_id:
+
+                return {
+                    "success": True,
+                    "analysis_id": analysis_id
+                }
+
+            return {
+                "success": False,
+                "error": "VirusTotal did not return an analysis ID."
+            }
+
+
+        if response.status_code == 401:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal rejected the API key "
+                    "or the account is not active."
+                )
+            }
+
+
+        if response.status_code == 403:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal denied access to this API request."
+                )
+            }
+
+
+        if response.status_code == 429:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal API rate limit reached. "
+                    "Please try again later."
+                )
+            }
+
+
+        try:
+
+            error_data = response.json()
+
+            error_message = (
+                error_data
+                .get("error", {})
+                .get("message")
+            )
+
+        except Exception:
+
+            error_message = None
+
+
+        return {
+            "success": False,
+            "error": (
+                error_message
+                or
+                f"VirusTotal returned HTTP {response.status_code}."
+            )
+        }
+
+
+    except requests.Timeout:
+
+        return {
+            "success": False,
+            "error": "VirusTotal request timed out."
+        }
+
+
+    except requests.RequestException as error:
+
+        return {
+            "success": False,
+            "error": f"VirusTotal connection error: {error}"
+        }
+
+
+# =========================================================
+# GET ANALYSIS
+# =========================================================
+
+def get_virustotal_analysis(analysis_id):
+
+    api_key = get_api_key()
+
+    if not api_key:
+
+        return {
+            "success": False,
+            "error": "VirusTotal API key is not configured."
+        }
+
+
+    headers = {
+        "accept": "application/json",
+        "x-apikey": api_key
+    }
+
+
+    try:
+
+        response = requests.get(
+            f"{VT_API_URL}/analyses/{analysis_id}",
+            headers=headers,
+            timeout=REQUEST_TIMEOUT
+        )
+
+
+        if response.status_code != 200:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal analysis request returned "
+                    f"HTTP {response.status_code}."
+                )
+            }
+
+
+        data = response.json()
+
+        attributes = (
+            data
+            .get("data", {})
+            .get("attributes", {})
+        )
+
+
+        return {
+            "success": True,
+            "status": attributes.get(
+                "status",
+                "unknown"
+            ),
+            "stats": attributes.get(
+                "stats",
+                {}
+            ),
+            "results": attributes.get(
+                "results",
+                {}
+            )
+        }
+
+
+    except requests.Timeout:
+
+        return {
+            "success": False,
+            "error": "VirusTotal analysis request timed out."
+        }
+
+
+    except requests.RequestException as error:
+
+        return {
+            "success": False,
+            "error": f"VirusTotal connection error: {error}"
+        }
+
+
+# =========================================================
+# WAIT FOR ANALYSIS
+# =========================================================
+
+def wait_for_virustotal_analysis(
+    analysis_id
+):
+
+    start_time = time.time()
+
+    while True:
+
+        elapsed = (
+            time.time() - start_time
+        )
+
+        if elapsed >= ANALYSIS_WAIT_SECONDS:
+
+            return {
+                "success": False,
+                "timeout": True,
+                "error": (
+                    "VirusTotal analysis is still "
+                    "processing."
+                )
+            }
+
+
+        result = get_virustotal_analysis(
+            analysis_id
+        )
+
+
+        if not result["success"]:
+
+            return result
+
+
+        status = result["status"]
+
+
+        # =================================================
+        # COMPLETED
+        # =================================================
+
+        if status == "completed":
+
+            return result
+
+
+        # =================================================
+        # QUEUED / IN PROGRESS
+        # =================================================
+
+        if status in [
+            "queued",
+            "in-progress"
+        ]:
+
+            time.sleep(
+                POLL_INTERVAL
+            )
+
+            continue
+
+
+        # =================================================
+        # UNKNOWN STATUS
+        # =================================================
+
+        return {
+            "success": False,
+            "timeout": False,
+            "error": (
+                "VirusTotal returned an unexpected "
+                f"analysis status: {status}"
+            )
+        }
+
+
+# =========================================================
+# GET EXISTING URL REPORT
+# =========================================================
+
+def get_virustotal_url_report(url):
+
+    api_key = get_api_key()
+
+    if not api_key:
+
+        return {
+            "success": False,
+            "error": "VirusTotal API key is not configured."
+        }
+
+
+    url_id = create_url_id(url)
+
+
+    headers = {
+        "accept": "application/json",
+        "x-apikey": api_key
+    }
+
+
+    try:
+
+        response = requests.get(
+            f"{VT_API_URL}/urls/{url_id}",
+            headers=headers,
+            timeout=REQUEST_TIMEOUT
+        )
+
+
+        if response.status_code == 200:
+
+            data = response.json()
+
+            attributes = (
+                data
+                .get("data", {})
+                .get("attributes", {})
+            )
+
+            return {
+                "success": True,
+                "attributes": attributes
+            }
+
+
+        if response.status_code == 404:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal does not have a URL report yet."
+                )
+            }
+
+
+        if response.status_code == 401:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal API authentication failed."
+                )
+            }
+
+
+        if response.status_code == 429:
+
+            return {
+                "success": False,
+                "error": (
+                    "VirusTotal API rate limit reached."
+                )
+            }
+
+
+        return {
+            "success": False,
+            "error": (
+                f"VirusTotal returned HTTP "
+                f"{response.status_code}."
+            )
+        }
+
+
+    except requests.Timeout:
+
+        return {
+            "success": False,
+            "error": (
+                "VirusTotal URL report request timed out."
+            )
+        }
+
+
+    except requests.RequestException as error:
+
+        return {
+            "success": False,
+            "error": (
+                f"VirusTotal connection error: {error}"
+            )
+        }
+
+
+# =========================================================
+# PARSE VIRUSTOTAL URL REPORT
+# =========================================================
+
+def parse_virustotal_results(
+    attributes
+):
+
+    stats = attributes.get(
+        "last_analysis_stats",
+        {}
+    )
+
+
+    results = attributes.get(
+        "last_analysis_results",
+        {}
+    )
+
+
+    malicious = stats.get(
+        "malicious",
+        0
+    )
+
+    suspicious = stats.get(
+        "suspicious",
+        0
+    )
+
+    harmless = stats.get(
+        "harmless",
+        0
+    )
+
+    undetected = stats.get(
+        "undetected",
+        0
+    )
+
+    timeout = stats.get(
+        "timeout",
+        0
+    )
+
+
+    vendor_detections = []
+
+    phishing_detections = []
+
+    suspicious_detections = []
+
+
+    for engine_name, result in results.items():
+
+        category = (
+            result
+            .get("category", "")
+            .lower()
+        )
+
+
+        raw_result = (
+            result
+            .get("result", "")
+            or ""
+        ).lower()
+
+
+        normalized_result = (
+            result
+            .get("result", "")
+            or ""
+        )
+
+
+        detection = {
+            "engine": (
+                result.get(
+                    "engine_name",
+                    engine_name
+                )
+            ),
+            "category": category,
+            "result": normalized_result
+        }
+
+
+        if category == "malicious":
+
+            vendor_detections.append(
+                detection
+            )
+
+
+        elif category == "suspicious":
+
+            suspicious_detections.append(
+                detection
+            )
+
+
+        if (
+            "phish" in raw_result
+            or
+            "phishing" in raw_result
+        ):
+
+            phishing_detections.append(
+                detection
+            )
+
+
+    # =====================================================
+    # VERDICT
+    # =====================================================
+
+    if malicious > 0:
+
+        verdict = "MALICIOUS"
+
+    elif suspicious > 0:
+
+        verdict = "SUSPICIOUS"
+
+    elif harmless > 0:
+
+        verdict = "CLEAN"
+
+    else:
+
+        verdict = "UNDETECTED"
+
+
+    # =====================================================
+    # PHISHING VERDICT
+    # =====================================================
+
+    if phishing_detections:
+
+        phishing_verdict = (
+            "PHISHING DETECTED"
+        )
+
+    elif malicious > 0:
+
+        phishing_verdict = (
+            "POSSIBLE PHISHING / MALICIOUS"
+        )
+
+    elif suspicious > 0:
+
+        phishing_verdict = (
+            "POSSIBLE PHISHING"
+        )
+
+    else:
+
+        phishing_verdict = (
+            "NO PHISHING DETECTION"
+        )
+
+
+    return {
+
+        "verdict": verdict,
+
+        "phishing_verdict":
+            phishing_verdict,
+
+        "malicious":
+            malicious,
+
+        "suspicious":
+            suspicious,
+
+        "harmless":
+            harmless,
+
+        "undetected":
+            undetected,
+
+        "timeout":
+            timeout,
+
+        "total_detections":
+            malicious + suspicious,
+
+        "vendor_detections":
+            vendor_detections,
+
+        "phishing_detections":
+            phishing_detections,
+
+        "suspicious_detections":
+            suspicious_detections,
+
+        "final_url":
+            attributes.get(
+                "last_final_url"
+            ),
+
+        "redirect_chain":
+            attributes.get(
+                "redirection_chain",
+                []
+            ),
+
+        "http_response_code":
+            attributes.get(
+                "last_http_response_code"
+            ),
+
+        "categories":
+            attributes.get(
+                "categories",
+                {}
+            ),
+
+        "targeted_brand":
+            attributes.get(
+                "targeted_brand",
+                {}
+            ),
+
+        "title":
+            attributes.get(
+                "title"
+            )
+    }
+
+
+# =========================================================
+# ANALYZE URL
+# =========================================================
 
 def analyze_url(url):
 
     url = url.strip()
 
-    # --------------------------------------------------------
-    # Add HTTPS if the user did not enter a protocol
-    # --------------------------------------------------------
 
-    if not re.match(
-        r"^https?://",
-        url,
-        re.IGNORECASE
-    ):
+    # =====================================================
+    # VALIDATION
+    # =====================================================
 
-        url = "https://" + url
+    if not url:
 
-    # --------------------------------------------------------
-    # Local analysis
-    # --------------------------------------------------------
+        return {
+            "risk_level": "UNKNOWN",
+            "risk_score": 0,
+            "verdict": "UNKNOWN",
+            "phishing_verdict": "UNKNOWN",
+            "url": "",
+            "message": "Please enter a URL."
+        }
 
-    local_result = local_url_analysis(url)
 
-    # --------------------------------------------------------
-    # VirusTotal analysis
-    # --------------------------------------------------------
+    parsed = urlparse(url)
 
-    vt_response = get_virustotal_report(url)
 
-    # --------------------------------------------------------
-    # Base result
-    # --------------------------------------------------------
+    if parsed.scheme.lower() not in [
+        "http",
+        "https"
+    ]:
+
+        return {
+            "risk_level": "UNKNOWN",
+            "risk_score": 0,
+            "verdict": "INVALID URL",
+            "phishing_verdict": "UNKNOWN",
+            "url": url,
+            "message": (
+                "Enter a complete URL beginning "
+                "with http:// or https://."
+            )
+        }
+
+
+    if not parsed.hostname:
+
+        return {
+            "risk_level": "UNKNOWN",
+            "risk_score": 0,
+            "verdict": "INVALID URL",
+            "phishing_verdict": "UNKNOWN",
+            "url": url,
+            "message": (
+                "The URL does not contain a valid hostname."
+            )
+        }
+
+
+    # =====================================================
+    # LOCAL ANALYSIS
+    # =====================================================
+
+    local_result = local_url_analysis(
+        url
+    )
+
+
+    # =====================================================
+    # INITIAL RESULT
+    # =====================================================
 
     result = {
+
         "url": url,
 
-        "domain": local_result["hostname"],
+        "risk_level": "UNKNOWN",
 
-        "protocol": local_result["scheme"],
+        "risk_score":
+            local_result["score"],
 
-        "https": local_result["https"],
+        "verdict": "UNKNOWN",
 
-        "ip_address": local_result["ip_address"],
+        "phishing_verdict":
+            "NOT DETERMINED",
 
-        "risk_score": local_result["risk_score"],
+        "local_verdict":
+            local_result["verdict"],
 
-        "local_risk": local_result["local_risk"],
+        "https":
+            local_result["https"],
 
-        "found_keywords": local_result["found_keywords"],
+        "http":
+            local_result["http"],
 
-        "indicators": local_result["indicators"],
+        "hostname":
+            local_result["hostname"],
 
-        "vt_available": vt_response["available"],
+        "indicators":
+            local_result["indicators"],
 
-        "vt_status": vt_response["status"],
+        "phishing_indicators":
+            local_result["phishing_indicators"],
 
-        "vt_message": vt_response.get(
-            "message",
-            ""
-        ),
+        "suspicious_patterns":
+            local_result["suspicious_patterns"],
 
-        "vt_verdict": "UNKNOWN",
+        "virustotal_available":
+            False,
 
-        "vt_malicious": 0,
+        "virustotal_error":
+            None,
 
-        "vt_suspicious": 0,
+        "malicious": 0,
 
-        "vt_harmless": 0,
+        "suspicious": 0,
 
-        "vt_undetected": 0,
+        "harmless": 0,
 
-        "vt_timeout": 0,
+        "undetected": 0,
 
-        "vendor_detections": []
+        "timeout": 0,
+
+        "total_detections": 0,
+
+        "vendor_detections": [],
+
+        "phishing_detections": [],
+
+        "suspicious_detections": [],
+
+        "final_url": None,
+
+        "redirect_chain": [],
+
+        "http_response_code": None,
+
+        "categories": {},
+
+        "targeted_brand": {},
+
+        "title": None,
+
+        "message": ""
     }
 
-    # ========================================================
-    # VIRUSTOTAL AVAILABLE
-    # ========================================================
 
-    if vt_response["available"]:
+    # =====================================================
+    # VIRUSTOTAL
+    # =====================================================
 
-        vt_result = parse_virustotal_report(
-            vt_response["data"]
+    api_key = get_api_key()
+
+
+    if not api_key:
+
+        result["virustotal_error"] = (
+            "VirusTotal API key is not configured."
         )
 
-        result["vt_verdict"] = vt_result["verdict"]
-
-        result["vt_malicious"] = vt_result["malicious"]
-
-        result["vt_suspicious"] = vt_result["suspicious"]
-
-        result["vt_harmless"] = vt_result["harmless"]
-
-        result["vt_undetected"] = vt_result["undetected"]
-
-        result["vt_timeout"] = vt_result["timeout"]
-
-        result["vendor_detections"] = vt_result[
-            "vendor_detections"
-        ]
-
-        # ----------------------------------------------------
-        # VirusTotal says malicious
-        # ----------------------------------------------------
-
-        if vt_result["verdict"] == "MALICIOUS":
-
-            result["risk_level"] = "MALICIOUS / PHISHING"
-
-            result["risk_score"] = max(
-                10,
-                local_result["risk_score"]
-            )
-
-            result["recommendation"] = (
-                "VirusTotal reports malicious or phishing "
-                "detections for this URL. Do not open the "
-                "link or enter passwords, OTPs, banking "
-                "information, or other personal information."
-            )
-
-        # ----------------------------------------------------
-        # VirusTotal says suspicious
-        # ----------------------------------------------------
-
-        elif vt_result["verdict"] == "SUSPICIOUS":
-
-            result["risk_level"] = "SUSPICIOUS"
-
-            result["risk_score"] = max(
-                6,
-                local_result["risk_score"]
-            )
-
-            result["recommendation"] = (
-                "VirusTotal reports suspicious activity "
-                "associated with this URL. Avoid opening "
-                "the link unless you can verify its source."
-            )
-
-        # ----------------------------------------------------
-        # VirusTotal says clean
-        # ----------------------------------------------------
-
-        elif vt_result["verdict"] == "CLEAN":
-
-            result["risk_level"] = "SAFE / CLEAN"
-
-            result["risk_score"] = 0
-
-            result["recommendation"] = (
-                "No malicious or suspicious detections were "
-                "reported by the available VirusTotal analysis. "
-                "This does not guarantee that the URL is completely safe."
-            )
-
-        # ----------------------------------------------------
-        # VirusTotal has no clear verdict
-        # ----------------------------------------------------
-
-        else:
-
-            result["risk_level"] = "UNDETECTED"
-
-            result["risk_score"] = local_result["risk_score"]
-
-            result["recommendation"] = (
-                "VirusTotal did not provide a clear malicious "
-                "or suspicious verdict for this URL. The URL "
-                "should still be treated cautiously."
-            )
-
-    # ========================================================
-    # VIRUSTOTAL NOT AVAILABLE
-    # ========================================================
 
     else:
 
-        # ----------------------------------------------------
-        # High local risk
-        # ----------------------------------------------------
+        # =================================================
+        # STEP 1: SUBMIT URL
+        # =================================================
 
-        if local_result["risk_score"] >= 6:
+        submission = submit_url_to_virustotal(
+            url
+        )
+
+
+        if submission["success"]:
+
+            analysis_id = (
+                submission["analysis_id"]
+            )
+
+
+            # =============================================
+            # STEP 2: WAIT FOR ANALYSIS
+            # =============================================
+
+            analysis = wait_for_virustotal_analysis(
+                analysis_id
+            )
+
+
+            if analysis["success"]:
+
+                # =========================================
+                # STEP 3: GET URL REPORT
+                # =========================================
+
+                report = get_virustotal_url_report(
+                    url
+                )
+
+
+                if report["success"]:
+
+                    vt_result = parse_virustotal_results(
+                        report["attributes"]
+                    )
+
+
+                    result.update(
+                        vt_result
+                    )
+
+
+                    result[
+                        "virustotal_available"
+                    ] = True
+
+
+                else:
+
+                    # -------------------------------------
+                    # IMPORTANT FALLBACK
+                    # -------------------------------------
+
+                    # If analysis completed but the URL
+                    # report is not immediately available,
+                    # use the analysis statistics/results.
+
+                    if (
+                        analysis.get("stats")
+                        or
+                        analysis.get("results")
+                    ):
+
+                        temporary_attributes = {
+
+                            "last_analysis_stats":
+                                analysis.get(
+                                    "stats",
+                                    {}
+                                ),
+
+                            "last_analysis_results":
+                                analysis.get(
+                                    "results",
+                                    {}
+                                )
+                        }
+
+
+                        vt_result = parse_virustotal_results(
+                            temporary_attributes
+                        )
+
+
+                        result.update(
+                            vt_result
+                        )
+
+
+                        result[
+                            "virustotal_available"
+                        ] = True
+
+
+                    else:
+
+                        result[
+                            "virustotal_error"
+                        ] = report["error"]
+
+
+            else:
+
+                # -----------------------------------------
+                # ANALYSIS STILL PROCESSING
+                # -----------------------------------------
+
+                # Instead of immediately showing
+                # "VirusTotal unavailable", try to obtain
+                # the existing URL report.
+
+                existing_report = (
+                    get_virustotal_url_report(
+                        url
+                    )
+                )
+
+
+                if existing_report["success"]:
+
+                    vt_result = parse_virustotal_results(
+                        existing_report["attributes"]
+                    )
+
+
+                    result.update(
+                        vt_result
+                    )
+
+
+                    result[
+                        "virustotal_available"
+                    ] = True
+
+
+                else:
+
+                    result[
+                        "virustotal_error"
+                    ] = (
+                        "VirusTotal submitted the URL, "
+                        "but the analysis is still processing. "
+                        "Local analysis is shown below."
+                    )
+
+
+        else:
+
+            # ---------------------------------------------
+            # SUBMISSION FAILED
+            # ---------------------------------------------
+
+            # Try existing VirusTotal report before
+            # declaring VirusTotal unavailable.
+
+            existing_report = (
+                get_virustotal_url_report(
+                    url
+                )
+            )
+
+
+            if existing_report["success"]:
+
+                vt_result = parse_virustotal_results(
+                    existing_report["attributes"]
+                )
+
+
+                result.update(
+                    vt_result
+                )
+
+
+                result[
+                    "virustotal_available"
+                ] = True
+
+
+            else:
+
+                result[
+                    "virustotal_error"
+                ] = submission["error"]
+
+
+    # =====================================================
+    # FINAL CLASSIFICATION
+    # =====================================================
+
+    if result["virustotal_available"]:
+
+        vt_verdict = result["verdict"]
+
+
+        if vt_verdict == "MALICIOUS":
 
             result["risk_level"] = "HIGH RISK"
 
-            result["recommendation"] = (
-                "Strong suspicious indicators were detected "
-                "by local URL analysis. VirusTotal reputation "
-                "data was not available, so this result is "
-                "not a confirmed malicious verdict."
+            result["message"] = (
+                "VirusTotal reports malicious detections "
+                "for this URL. Do not open the link or "
+                "enter credentials."
             )
 
-        # ----------------------------------------------------
-        # Medium local risk
-        # ----------------------------------------------------
 
-        elif local_result["risk_score"] >= 3:
+        elif vt_verdict == "SUSPICIOUS":
 
             result["risk_level"] = "SUSPICIOUS"
 
-            result["recommendation"] = (
-                "Some suspicious indicators were detected. "
-                "VirusTotal reputation data was not available."
+            result["message"] = (
+                "VirusTotal reports suspicious activity "
+                "associated with this URL."
             )
 
-        # ----------------------------------------------------
-        # Low local risk
-        # ----------------------------------------------------
+
+        elif vt_verdict == "CLEAN":
+
+            if local_result["verdict"] in [
+                "HIGH RISK",
+                "SUSPICIOUS"
+            ]:
+
+                result["risk_level"] = "SUSPICIOUS"
+
+                result["message"] = (
+                    "VirusTotal did not report malicious "
+                    "detections, but local analysis found "
+                    "suspicious characteristics. "
+                    "Do not treat this URL as automatically safe."
+                )
+
+            else:
+
+                result["risk_level"] = "LOW RISK"
+
+                result["message"] = (
+                    "VirusTotal did not report malicious "
+                    "detections in the available results. "
+                    "This does not guarantee that the URL "
+                    "is completely safe."
+                )
+
 
         else:
 
             result["risk_level"] = "UNKNOWN"
 
-            result["recommendation"] = (
-                "No strong indicators were detected by local "
-                "analysis, but VirusTotal reputation data was "
-                "not available. This does NOT prove that the "
-                "URL is safe."
+            result["message"] = (
+                "VirusTotal did not provide a definitive "
+                "malicious or clean verdict."
             )
+
+
+    else:
+
+        # =================================================
+        # LOCAL FALLBACK
+        # =================================================
+
+        local_verdict = local_result["verdict"]
+
+
+        if local_verdict == "HIGH RISK":
+
+            result["risk_level"] = "HIGH RISK"
+
+            result["verdict"] = "LOCAL HIGH RISK"
+
+            result["message"] = (
+                "VirusTotal was unavailable, but local "
+                "analysis detected several suspicious "
+                "characteristics."
+            )
+
+
+        elif local_verdict == "SUSPICIOUS":
+
+            result["risk_level"] = "SUSPICIOUS"
+
+            result["verdict"] = "LOCAL SUSPICIOUS"
+
+            result["message"] = (
+                "VirusTotal is still processing the URL. "
+                "Local analysis found suspicious characteristics."
+            )
+
+
+        elif local_verdict == "LOW RISK":
+
+            result["risk_level"] = "LOW RISK"
+
+            result["verdict"] = "LOCAL LOW RISK"
+
+            result["message"] = (
+                "VirusTotal is still processing the URL. "
+                "Local analysis did not find major suspicious indicators."
+            )
+
+
+        else:
+
+            result["risk_level"] = "UNKNOWN"
+
+            result["verdict"] = "UNKNOWN"
+
+            result["message"] = (
+                "VirusTotal is still processing the URL and "
+                "local analysis found no obvious malicious indicators. "
+                "This does not guarantee that the URL is safe."
+            )
+
+
+    # =====================================================
+    # FINAL PHISHING ASSESSMENT
+    # =====================================================
+
+    if result["phishing_detections"]:
+
+        result["phishing_verdict"] = (
+            "PHISHING DETECTED"
+        )
+
+
+    elif (
+        result["virustotal_available"]
+        and
+        result["verdict"] == "MALICIOUS"
+    ):
+
+        result["phishing_verdict"] = (
+            "POSSIBLE PHISHING / MALICIOUS"
+        )
+
+
+    elif result["phishing_indicators"]:
+
+        result["phishing_verdict"] = (
+            "POSSIBLE PHISHING"
+        )
+
+
+    elif result["virustotal_available"]:
+
+        result["phishing_verdict"] = (
+            "NO PHISHING DETECTION"
+        )
+
+
+    else:
+
+        result["phishing_verdict"] = (
+            "NOT DETERMINED"
+        )
+
 
     return result

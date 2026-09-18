@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>APK Security Analyzer</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📱 APK Security Analyzer</h1>
+
+        <p>
+            Analyze Android APK files using local static
+            inspection and VirusTotal threat intelligence.
+        </p>
+
+
+        <!-- ========================================= -->
+        <!-- UPLOAD -->
+        <!-- ========================================= -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <label for="apk_file">
+                Select Android APK
+            </label>
+
+            <br><br>
+
+            <input
+                type="file"
+                id="apk_file"
+                name="apk_file"
+                accept=".apk"
+                required
+            >
+
+            <br><br>
+
+            <button type="submit">
+                🔍 Analyze APK
+            </button>
+
+        </form>
+
+
+        {% if result %}
+
+        <hr>
+
+
+        <!-- ========================================= -->
+        <!-- BASIC INFORMATION -->
+        <!-- ========================================= -->
+
+        <h2>📋 APK Information</h2>
+
+        <p>
+            <strong>File:</strong>
+            {{ result.filename }}
+        </p>
+
+        <p>
+            <strong>Size:</strong>
+            {{ result.size }} bytes
+        </p>
+
+        <p>
+            <strong>SHA-256:</strong>
+            <br>
+            <code>{{ result.sha256 }}</code>
+        </p>
+
+        <p>
+            <strong>Local Verdict:</strong>
+
+            <strong>
+                {{ result.risk_level }}
+            </strong>
+        </p>
+
+
+        {% if result.file_count %}
+
+        <p>
+            <strong>Files inside APK:</strong>
+            {{ result.file_count }}
+        </p>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- LOCAL ANALYSIS -->
+        <!-- ========================================= -->
+
+        <h2>🔎 Local Static Analysis</h2>
+
+        {% if result.indicators %}
+
+        <ul>
+
+            {% for indicator in result.indicators %}
+
+            <li>
+                {{ indicator }}
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% else %}
+
+        <p>
+            No obvious local indicators were detected.
+        </p>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- DEX -->
+        <!-- ========================================= -->
+
+        {% if result.dex_files %}
+
+        <h3>🧩 DEX Files</h3>
+
+        <ul>
+
+            {% for dex in result.dex_files %}
+
+            <li>
+                <code>{{ dex }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- NATIVE LIBRARIES -->
+        <!-- ========================================= -->
+
+        {% if result.native_libraries %}
+
+        <h3>⚙️ Native Libraries</h3>
+
+        <ul>
+
+            {% for library in result.native_libraries %}
+
+            <li>
+                <code>{{ library }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- PERMISSIONS -->
+        <!-- ========================================= -->
+
+        {% if result.permissions %}
+
+        <h3>🔐 Detected Permissions</h3>
+
+        <ul>
+
+            {% for permission in result.permissions %}
+
+            <li>
+                <code>{{ permission }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- SUSPICIOUS PERMISSIONS -->
+        <!-- ========================================= -->
+
+        {% if result.suspicious_permissions %}
+
+        <h3>⚠️ Security-Sensitive Permissions</h3>
+
+        <ul>
+
+            {% for item in result.suspicious_permissions %}
+
+            <li>
+
+                <strong>
+                    {{ item.permission }}
+                </strong>
+
+                —
+                {{ item.description }}
+
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- SUSPICIOUS FILES -->
+        <!-- ========================================= -->
+
+        {% if result.suspicious_files %}
+
+        <h3>🚨 Suspicious APK Entries</h3>
+
+        <ul>
+
+            {% for item in result.suspicious_files %}
+
+            <li>
+                <code>{{ item }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- URLS -->
+        <!-- ========================================= -->
+
+        {% if result.urls %}
+
+        <h3>🌐 URLs Found Inside APK</h3>
+
+        <ul>
+
+            {% for url in result.urls %}
+
+            <li>
+                <code>{{ url }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- DOMAINS -->
+        <!-- ========================================= -->
+
+        {% if result.domains %}
+
+        <h3>🌍 Domains Found</h3>
+
+        <ul>
+
+            {% for domain in result.domains %}
+
+            <li>
+                <code>{{ domain }}</code>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- VIRUSTOTAL -->
+        <!-- ========================================= -->
+
+        <hr>
+
+        <h2>
+            🦠 VirusTotal Threat Intelligence
+        </h2>
+
+
+        {% if result.virustotal %}
+
+        <h3>
+            Verdict:
+            {{ result.virustotal.verdict }}
+        </h3>
+
+
+        <p>
+            <strong>Malicious:</strong>
+            {{ result.virustotal.malicious }}
+        </p>
+
+        <p>
+            <strong>Suspicious:</strong>
+            {{ result.virustotal.suspicious }}
+        </p>
+
+        <p>
+            <strong>Harmless:</strong>
+            {{ result.virustotal.harmless }}
+        </p>
+
+        <p>
+            <strong>Undetected:</strong>
+            {{ result.virustotal.undetected }}
+        </p>
+
+        <p>
+            <strong>Timeout:</strong>
+            {{ result.virustotal.timeout }}
+        </p>
+
+        <p>
+            <strong>Engines:</strong>
+            {{ result.virustotal.total_engines }}
+        </p>
+
+
+        {% if result.virustotal.detections %}
+
+        <h3>
+            🚨 Vendor Detections
+        </h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Security Vendor
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Detection
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for detection in result.virustotal.detections %}
+
+                <tr>
+
+                    <td>
+                        {{ detection.engine }}
+                    </td>
+
+                    <td>
+                        {{ detection.category }}
+                    </td>
+
+                    <td>
+                        {{ detection.result }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <p>
+            No malicious or suspicious vendor detections
+            were returned by VirusTotal.
+        </p>
+
+        {% endif %}
+
+
+        {% if result.virustotal.popular_threat_classification %}
+
+        <h3>
+            🧠 VirusTotal Threat Classification
+        </h3>
+
+        <pre>{{ result.virustotal.popular_threat_classification }}</pre>
+
+        {% endif %}
+
+
+        {% if result.virustotal.tags %}
+
+        <h3>
+            🏷️ VirusTotal Tags
+        </h3>
+
+        <p>
+
+            {% for tag in result.virustotal.tags %}
+
+            <code>{{ tag }}</code>
+
+            {% endfor %}
+
+        </p>
+
+        {% endif %}
+
+
+        {% else %}
+
+        <p>
+            VirusTotal report unavailable.
+        </p>
+
+        <p>
+            {{ result.virustotal_message }}
+        </p>
+
+        <p>
+            The local APK analysis is still available.
+        </p>
+
+        {% endif %}
+
+
+        <!-- ========================================= -->
+        <!-- EDUCATIONAL DISCLAIMER -->
+        <!-- ========================================= -->
+
+        <hr>
+
+        <p>
+            <strong>Security note:</strong>
+            A local "no obvious indicators" result does
+            not prove that an APK is safe. Static heuristics
+            can produce false positives and false negatives.
+            VirusTotal results are threat-intelligence
+            information and should also be interpreted in
+            context.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
