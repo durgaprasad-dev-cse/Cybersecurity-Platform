@@ -3,6 +3,7 @@ import uuid
 
 from flask import Flask, render_template, request
 
+from scam_agent import analyze_scam
 from port_scanner import port_scanner
 from url_analyzer import analyze_url
 from file_analyzer import analyze_file
@@ -13,15 +14,29 @@ from password_security import (
 from apk_analyzer import analyze_apk
 
 
+# =========================================================
+# FLASK APPLICATION
+# =========================================================
+
 app = Flask(__name__)
 
+
+# =========================================================
+# UPLOAD CONFIGURATION
+# =========================================================
 
 UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config["MAX_CONTENT_LENGTH"] = (
+    10 * 1024 * 1024
+)
+
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
 
 
 # =========================================================
@@ -30,7 +45,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+
+    return render_template(
+        "index.html"
+    )
 
 
 # =========================================================
@@ -39,14 +57,20 @@ def index():
 
 @app.route("/awareness")
 def awareness():
-    return render_template("awareness.html")
+
+    return render_template(
+        "awareness.html"
+    )
 
 
 # =========================================================
 # PHISHING DEMO
 # =========================================================
 
-@app.route("/phishing", methods=["GET", "POST"])
+@app.route(
+    "/phishing",
+    methods=["GET", "POST"]
+)
 def phishing():
 
     captured = None
@@ -105,7 +129,9 @@ def password_security():
 # PASSWORD GENERATOR
 # =========================================================
 
-@app.route("/password-generator")
+@app.route(
+    "/password-generator"
+)
 def password_generator():
 
     password = generate_strong_password()
@@ -116,7 +142,9 @@ def password_generator():
     )
 
 
-@app.route("/generate-password")
+@app.route(
+    "/generate-password"
+)
 def generate_password():
 
     password = generate_strong_password()
@@ -241,12 +269,19 @@ def url_analyzer():
                 if extension not in allowed_extensions:
 
                     result = {
+
                         "risk_level": "SUSPICIOUS",
+
                         "risk_score": 3,
+
                         "filename": original_filename,
+
                         "extension": extension,
+
                         "size": 0,
+
                         "sha256": "Not calculated",
+
                         "indicators": [
                             (
                                 "This file extension is "
@@ -325,20 +360,34 @@ def apk_analyzer():
                 original_filename
             )[1].lower()
 
+            # -------------------------------------------------
+            # INVALID FILE TYPE
+            # -------------------------------------------------
+
             if extension != ".apk":
 
                 result = {
+
                     "filename": original_filename,
+
                     "risk_level": "INVALID",
+
                     "risk_score": 0,
+
                     "indicators": [
                         "Please upload a valid .apk file."
                     ],
+
                     "virustotal": None,
+
                     "virustotal_message": (
                         "VirusTotal was not contacted."
                     )
                 }
+
+            # -------------------------------------------------
+            # APK ANALYSIS
+            # -------------------------------------------------
 
             else:
 
@@ -366,13 +415,19 @@ def apk_analyzer():
                 except Exception as error:
 
                     result = {
+
                         "filename": original_filename,
+
                         "risk_level": "ANALYSIS ERROR",
+
                         "risk_score": 0,
+
                         "indicators": [
                             f"APK analysis failed: {error}"
                         ],
+
                         "virustotal": None,
+
                         "virustotal_message": (
                             "VirusTotal analysis "
                             "was not completed."
@@ -392,6 +447,77 @@ def apk_analyzer():
     return render_template(
         "apk_analyzer.html",
         result=result
+    )
+
+
+# =========================================================
+# CYBER SCAM HELP CENTER
+# =========================================================
+
+@app.route(
+    "/scam-help",
+    methods=["GET", "POST"]
+)
+def scam_help():
+
+    result = None
+    error = None
+
+    if request.method == "POST":
+
+        description = request.form.get(
+            "description",
+            ""
+        ).strip()
+
+        category = request.form.get(
+            "category",
+            "Other / Unclear"
+        )
+
+        requested_actions = request.form.getlist(
+            "requested_action"
+        )
+
+        user_action = request.form.get(
+            "user_action",
+            "I am not sure"
+        )
+
+        current_status = request.form.get(
+            "current_status",
+            "I am unsure"
+        )
+
+        try:
+
+            result = analyze_scam(
+                user_text=description,
+                category=category,
+                requested_actions=requested_actions,
+                user_action=user_action,
+                current_status=current_status
+            )
+
+        except ValueError as exc:
+
+            error = str(exc)
+
+        except RuntimeError as exc:
+
+            error = str(exc)
+
+        except Exception:
+
+            error = (
+                "The AI analysis could not be completed. "
+                "Please try again."
+            )
+
+    return render_template(
+        "scam_help.html",
+        result=result,
+        error=error
     )
 
 

@@ -6,84 +6,812 @@
     <meta charset="UTF-8">
 
     <meta
-        name="google-site-verification"
-        content="cVn8ItqUzX3hF194JXJPPqr6W8LN1svDOUBJ8cBgv7A"
-    >
-
-    <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Cybersecurity Toolkit</title>
+    <meta
+        name="description"
+        content="Cybersecurity Toolkit — an educational platform for cybersecurity awareness, phishing education, password security, URL analysis, APK analysis and defensive security tools."
+    >
+
+    <meta
+        name="keywords"
+        content="cybersecurity toolkit, cybersecurity awareness, phishing awareness, password security, URL safety, APK security, cybersecurity tools"
+    >
+
+    <meta name="author" content="Durga Prasad I">
+
+    <meta
+        name="google-site-verification"
+        content="cVn8ItqUzX3hF194JXJPPqr6W8LN1svDOUBJ8cBgv7A"
+    >
+
+    <title>Cybersecurity Toolkit | Learn • Analyze • Protect</title>
+
+    <!-- Favicon -->
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ url_for('static', filename='favicon.png') }}"
+    >
 
     <style>
 
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: lavender;
-            color: #2c2c2c;
+            box-sizing: border-box;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 60px auto;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        html {
+            scroll-behavior: smooth;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 38px;
-            color: #4b2c82;
-            margin-bottom: 10px;
+        body {
+            font-family:
+                "Segoe UI",
+                Inter,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(73, 91, 255, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(0, 220, 255, 0.12),
+                    transparent 30%
+                ),
+                #070b16;
+
+            color: #f5f7ff;
+            min-height: 100vh;
+            line-height: 1.6;
         }
 
-        .subtitle {
-            text-align: center;
+        /* ==============================
+           NAVIGATION
+        ============================== */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            width: 100%;
+
+            background: rgba(7, 11, 22, 0.82);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+
+            padding: 18px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            text-decoration: none;
+            color: white;
+
+            font-weight: 700;
             font-size: 18px;
-            color: #555;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5865f2,
+                    #00c6ff
+                );
+
+            box-shadow:
+                0 8px 25px rgba(0, 198, 255, 0.22);
+
+            font-size: 20px;
+        }
+
+        .brand-text span {
+            color: #7ddcff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #b9c1d9;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .nav-button {
+            padding: 10px 17px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5865f2,
+                    #00b8ff
+                );
+
+            color: white !important;
+
+            box-shadow:
+                0 8px 25px rgba(0, 184, 255, 0.16);
+        }
+
+        /* ==============================
+           HERO
+        ============================== */
+
+        .hero {
+            max-width: 1200px;
+            margin: auto;
+
+            min-height: 650px;
+
+            padding: 90px 25px 70px;
+
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 70px;
+
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border-radius: 50px;
+
+            background: rgba(88, 101, 242, 0.10);
+
+            border: 1px solid rgba(125, 220, 255, 0.20);
+
+            color: #9fe8ff;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 25px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            background: #36e69b;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 12px #36e69b;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 6vw, 76px);
+
+            line-height: 1.04;
+
+            letter-spacing: -2.5px;
+
+            margin-bottom: 25px;
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 0%,
+                    #9deaff 45%,
+                    #6975ff 100%
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .hero-description {
+            max-width: 650px;
+
+            color: #aeb8d0;
+
+            font-size: 18px;
+
             margin-bottom: 35px;
         }
 
-        h2 {
-            font-size: 26px;
-            color: #4b2c82;
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+
+            flex-wrap: wrap;
+        }
+
+        .primary-button,
+        .secondary-button {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 14px 22px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .primary-button {
+            background:
+                linear-gradient(
+                    135deg,
+                    #5865f2,
+                    #00c6ff
+                );
+
+            color: white;
+
+            box-shadow:
+                0 15px 35px rgba(0, 198, 255, 0.18);
+        }
+
+        .secondary-button {
+            color: #e6eaff;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .primary-button:hover,
+        .secondary-button:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ==============================
+           SECURITY VISUAL
+        ============================== */
+
+        .security-visual {
+            position: relative;
+
+            min-height: 420px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .security-orbit {
+            position: absolute;
+
+            width: 360px;
+            height: 360px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(93, 214, 255, 0.16);
+
+            box-shadow:
+                0 0 80px rgba(0, 198, 255, 0.08);
+
+            animation: rotate 20s linear infinite;
+        }
+
+        .security-orbit::before,
+        .security-orbit::after {
+            content: "";
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            background: #63dcff;
+
+            box-shadow:
+                0 0 18px #63dcff;
+        }
+
+        .security-orbit::before {
+            width: 8px;
+            height: 8px;
+
+            top: 25px;
+            left: 75px;
+        }
+
+        .security-orbit::after {
+            width: 6px;
+            height: 6px;
+
+            right: 55px;
+            bottom: 65px;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .shield-card {
+            position: relative;
+            z-index: 2;
+
+            width: 250px;
+            height: 290px;
+
+            border-radius: 35px;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.10),
+                    rgba(255, 255, 255, 0.025)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.14);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .shield {
+            font-size: 105px;
+
+            filter:
+                drop-shadow(
+                    0 0 25px rgba(81, 214, 255, 0.65)
+                );
+
+            margin-bottom: 15px;
+        }
+
+        .shield-card h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .shield-card p {
+            color: #8f9ab5;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           STATS
+        ============================== */
+
+        .stats {
+            max-width: 1100px;
+            margin: 0 auto 90px;
+
+            padding: 0 25px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            padding: 25px;
+
+            text-align: center;
+
+            border-radius: 18px;
+
+            background: rgba(255, 255, 255, 0.035);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-card strong {
+            display: block;
+
+            font-size: 28px;
+
+            color: #dcecff;
+
+            margin-bottom: 4px;
+        }
+
+        .stat-card span {
+            color: #8490aa;
+
+            font-size: 13px;
+        }
+
+        /* ==============================
+           TOOLS SECTION
+        ============================== */
+
+        .tools-section {
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 50px 25px 100px;
+        }
+
+        .section-heading {
+            text-align: center;
+
+            max-width: 700px;
+
+            margin: 0 auto 50px;
+        }
+
+        .section-label {
+            color: #6bdcff;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(32px, 4vw, 48px);
+
+            letter-spacing: -1px;
+
+            margin-bottom: 15px;
+        }
+
+        .section-heading p {
+            color: #8f9ab5;
+
+            font-size: 16px;
+        }
+
+        .tools-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .tool-card {
+            position: relative;
+
+            padding: 28px;
+
+            min-height: 245px;
+
+            display: flex;
+            flex-direction: column;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.065),
+                    rgba(255, 255, 255, 0.025)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            backdrop-filter: blur(12px);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-7px);
+
+            border-color:
+                rgba(99, 220, 255, 0.35);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .tool-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                rgba(88, 101, 242, 0.12);
+
+            border:
+                1px solid rgba(99, 220, 255, 0.12);
+
+            font-size: 24px;
+
             margin-bottom: 20px;
         }
 
-        ol {
+        .tool-card h3 {
             font-size: 20px;
-            line-height: 1.9;
-            padding-left: 25px;
+
+            margin-bottom: 9px;
         }
 
-        ol li {
-            margin-bottom: 10px;
+        .tool-card p {
+            color: #8f9ab5;
+
+            font-size: 14px;
+
+            line-height: 1.65;
+
+            margin-bottom: 20px;
         }
 
-        a {
+        .tool-link {
+            margin-top: auto;
+
+            color: #71ddff;
+
             text-decoration: none;
-            color: #2b2b8a;
-            font-weight: 600;
+
+            font-size: 14px;
+
+            font-weight: 700;
         }
 
-        a:hover {
-            color: #6a1b9a;
-            text-decoration: underline;
+        .tool-link:hover {
+            color: white;
         }
 
-        .footer-note {
-            margin-top: 40px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
-            font-size: 15px;
-            color: #666;
+        /* ==============================
+           CTA
+        ============================== */
+
+        .cta {
+            max-width: 1100px;
+
+            margin: 0 auto 100px;
+
+            padding: 55px 40px;
+
             text-align: center;
+
+            border-radius: 28px;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(88, 101, 242, 0.22),
+                    rgba(0, 198, 255, 0.04) 55%,
+                    transparent 80%
+                );
+
+            border:
+                1px solid rgba(125, 220, 255, 0.12);
+        }
+
+        .cta h2 {
+            font-size: 34px;
+
+            margin-bottom: 12px;
+        }
+
+        .cta p {
+            color: #9ba6c0;
+
+            max-width: 650px;
+
+            margin: 0 auto 25px;
+        }
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            border-top:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            padding: 35px 25px;
+
+            text-align: center;
+
+            color: #707b95;
+
+            font-size: 13px;
+        }
+
+        .footer-brand {
+            color: #dcecff;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+        .ethical-note {
+            margin-top: 8px;
+
+            color: #59647c;
+
+            font-size: 12px;
+        }
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 950px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+
+                padding-top: 70px;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .security-visual {
+                min-height: 360px;
+            }
+
+            .tools-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-container {
+                padding: 14px 18px;
+            }
+
+            .hero {
+                padding:
+                    60px 18px
+                    50px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .security-orbit {
+                width: 280px;
+                height: 280px;
+            }
+
+            .shield-card {
+                width: 210px;
+                height: 250px;
+            }
+
+            .shield {
+                font-size: 80px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+
+                margin-bottom: 50px;
+            }
+
+            .tools-section {
+                padding:
+                    40px 18px
+                    70px;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta {
+                margin:
+                    0 18px
+                    70px;
+
+                padding: 40px 22px;
+            }
+
+            .cta h2 {
+                font-size: 28px;
+            }
+
         }
 
     </style>
@@ -93,93 +821,545 @@
 
 <body>
 
-<div class="container">
+    <!-- ==============================
+         NAVIGATION
+    ============================== -->
 
-    <h1>
-        Cybersecurity Awareness Platform
-    </h1>
+    <nav class="navbar">
 
-    <p class="subtitle">
-        Learn • Understand • Protect • Secure
-    </p>
+        <div class="nav-container">
 
+            <a href="/" class="brand">
 
-    <p style="font-size:18px; line-height:1.7;">
+                <div class="brand-icon">
+                    🛡️
+                </div>
 
-        This platform is created to educate users about Cyber Security,
-        demonstrate real-world cyber attacks, and provide practical tools
-        to improve digital safety and awareness.
+                <div class="brand-text">
+                    Cyber<span>Toolkit</span>
+                </div>
 
-    </p>
-
-
-    <h2>
-        Available Services
-    </h2>
-
-
-    <ol>
-
-        <li>
-            <a href="/awareness">
-                Cyber Awareness
             </a>
-        </li>
+
+            <ul class="nav-links">
+
+                <li>
+                    <a href="#tools">
+                        Security Tools
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/awareness">
+                        Awareness
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#about">
+                        About
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="#tools"
+                        class="nav-button"
+                    >
+                        Explore Toolkit
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
 
 
-        <li>
-            <a href="/phishing">
-                Phishing Demo
-            </a>
-        </li>
+    <!-- ==============================
+         HERO
+    ============================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="badge">
+
+                    <span class="status-dot"></span>
+
+                    Cybersecurity Education Platform
+
+                </div>
 
 
-        <li>
-            <a href="/password-security">
-                Password Strength Checker
-            </a>
-        </li>
+                <h1>
+
+                    <span class="gradient-text">
+                        Learn.
+                    </span>
+
+                    <br>
+
+                    <span class="gradient-text">
+                        Analyze.
+                    </span>
+
+                    <br>
+
+                    <span class="gradient-text">
+                        Protect.
+                    </span>
+
+                </h1>
 
 
-        <li>
-            <a href="/password-generator">
-                Strong Password Generator
-            </a>
-        </li>
+                <p class="hero-description">
+
+                    A practical cybersecurity toolkit designed to
+                    help users understand digital threats, explore
+                    security concepts, and develop safer online habits
+                    through interactive educational tools.
+
+                </p>
 
 
-        <li>
-            <a href="/portscan">
-                Port Scanner
-            </a>
-        </li>
+                <div class="hero-buttons">
+
+                    <a
+                        href="#tools"
+                        class="primary-button"
+                    >
+                        Explore Security Tools →
+                    </a>
+
+                    <a
+                        href="/awareness"
+                        class="secondary-button"
+                    >
+                        Start Cyber Awareness
+                    </a>
+
+                </div>
+
+            </div>
 
 
-        <li>
-            <a href="{{ url_for('url_analyzer') }}">
-                URL & File Safety Analyzer
-            </a>
-        </li>
+            <!-- SECURITY VISUAL -->
+
+            <div class="security-visual">
+
+                <div class="security-orbit"></div>
+
+                <div class="shield-card">
+
+                    <div class="shield">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Digital Protection
+                    </h3>
+
+                    <p>
+                        Security starts with awareness.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
 
 
-        <li>
-            <a href="{{ url_for('apk_analyzer') }}">
-                 APK Security Analyzer
-            </a>
-        </li>
+        <!-- ==============================
+             STATS
+        ============================== -->
 
-    </ol>
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <strong>7+</strong>
+
+                <span>
+                    Security & Awareness Tools
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <strong>24/7</strong>
+
+                <span>
+                    Learn Security Anytime
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <strong>100%</strong>
+
+                <span>
+                    Educational & Defensive Focus
+                </span>
+
+            </div>
+
+        </section>
 
 
-    <div class="footer-note">
+        <!-- ==============================
+             TOOLS
+        ============================== -->
 
-        ⚠ This project is for educational purposes only.
-        <br>
-        Designed to promote safe and ethical cybersecurity practices.
+        <section
+            class="tools-section"
+            id="tools"
+        >
 
+            <div class="section-heading">
+
+                <div class="section-label">
+                    Security Suite
+                </div>
+
+                <h2>
+                    Explore the Toolkit
+                </h2>
+
+                <p>
+                    Practical tools and demonstrations
+                    designed to make cybersecurity easier
+                    to understand and apply.
+                </p>
+
+            </div>
+
+
+            <div class="tools-grid">
+
+
+                <!-- TOOL 1 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Cyber Awareness
+                    </h3>
+
+                    <p>
+                        Learn about common cyber threats,
+                        social engineering, phishing,
+                        malware and safer digital practices.
+                    </p>
+
+                    <a
+                        href="/awareness"
+                        class="tool-link"
+                    >
+                        Learn More →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 2 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🎣
+                    </div>
+
+                    <h3>
+                        Phishing Demo
+                    </h3>
+
+                    <p>
+                        Understand how deceptive login
+                        interfaces can be used in phishing
+                        attacks through an educational demonstration.
+                    </p>
+
+                    <a
+                        href="/phishing"
+                        class="tool-link"
+                    >
+                        Open Demo →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 3 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Password Security
+                    </h3>
+
+                    <p>
+                        Analyze password characteristics
+                        and learn how to create stronger
+                        authentication credentials.
+                    </p>
+
+                    <a
+                        href="/password-security"
+                        class="tool-link"
+                    >
+                        Check Password →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 4 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🔑
+                    </div>
+
+                    <h3>
+                        Password Generator
+                    </h3>
+
+                    <p>
+                        Generate strong random passwords
+                        using a secure server-side generator.
+                    </p>
+
+                    <a
+                        href="/password-generator"
+                        class="tool-link"
+                    >
+                        Generate Password →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 5 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Port Scanner
+                    </h3>
+
+                    <p>
+                        Explore network port availability
+                        for authorized security testing
+                        and cybersecurity education.
+                    </p>
+
+                    <a
+                        href="/portscan"
+                        class="tool-link"
+                    >
+                        Open Scanner →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 6 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        URL & File Analyzer
+                    </h3>
+
+                    <p>
+                        Analyze URLs and files using local
+                        security indicators and VirusTotal
+                        intelligence where available.
+                    </p>
+
+                    <a
+                        href="{{ url_for('url_analyzer') }}"
+                        class="tool-link"
+                    >
+                        Analyze →
+                    </a>
+
+                </article>
+
+
+                <!-- TOOL 7 -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        📱
+                    </div>
+
+                    <h3>
+                        APK Security Analyzer
+                    </h3>
+
+                    <p>
+                        Perform static APK analysis including
+                        hashes, permissions, suspicious indicators
+                        and security intelligence.
+                    </p>
+
+                    <a
+                        href="{{ url_for('apk_analyzer') }}"
+                        class="tool-link"
+                    >
+                        Analyze APK →
+                    </a>
+
+                </article>
+
+                <div class="tool-card">
+
+    <div class="tool-icon">
+        🤖
     </div>
 
+    <h3>
+        AI Cyber Scam Help Center
+    </h3>
+
+    <p>
+        Describe a suspicious message, call, payment request
+        or online situation and receive AI-assisted safety
+        guidance.
+    </p>
+
+    <a
+        href="{{ url_for('scam_help') }}"
+        class="tool-btn"
+    >
+        Analyze Scam →
+    </a>
+
 </div>
+
+
+                <!-- FUTURE TOOL CARD -->
+
+                <article class="tool-card">
+
+                    <div class="tool-icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        More Security Tools
+                    </h3>
+
+                    <p>
+                        The platform is designed to grow with
+                        additional cybersecurity education,
+                        analysis and defensive capabilities.
+                    </p>
+
+                    <a
+                        href="#about"
+                        class="tool-link"
+                    >
+                        Coming Soon →
+                    </a>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             CTA
+        ============================== -->
+
+        <section
+            class="cta"
+            id="about"
+        >
+
+            <h2>
+                Build Better Cybersecurity Awareness
+            </h2>
+
+            <p>
+                Understanding cybersecurity is the first step
+                toward protecting your digital identity,
+                information and devices.
+            </p>
+
+            <a
+                href="/awareness"
+                class="primary-button"
+            >
+                Begin Learning →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==============================
+         FOOTER
+    ============================== -->
+
+    <footer>
+
+        <div class="footer-brand">
+            Cybersecurity Toolkit
+        </div>
+
+        <div>
+            Learn • Understand • Protect • Secure
+        </div>
+
+        <div class="ethical-note">
+
+            ⚠ This platform is intended for
+            educational, defensive and authorized
+            cybersecurity purposes only.
+
+        </div>
+
+        <div style="margin-top: 14px;">
+
+            © 2026 Cybersecurity Toolkit.
+            All rights reserved.
+
+        </div>
+
+    </footer>
+
 
 </body>
 

@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AI-powered Cyber Scam Incident Assessment and Response Center."
+    >
+
+    <title>
+        AI Cyber Scam Incident Response Center
+    </title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ url_for('static', filename='favicon.png') }}"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(0,212,255,0.10),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom left,
+                    rgba(91,70,255,0.08),
+                    transparent 35%
+                ),
+                #07111f;
+
+            color: #edf7ff;
+
+            min-height: 100vh;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        nav {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 18px 7%;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            background:
+                rgba(5,15,28,0.95);
+
+            backdrop-filter:
+                blur(14px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.08);
+        }
+
+
+        .logo {
+
+            text-decoration: none;
+
+            color: white;
+
+            font-weight: 800;
+
+            font-size: 1.15rem;
+        }
+
+
+        .logo span {
+
+            color: #00d4ff;
+        }
+
+
+        .home {
+
+            text-decoration: none;
+
+            color: white;
+
+            border:
+                1px solid rgba(0,212,255,0.35);
+
+            padding:
+                8px 16px;
+
+            border-radius: 9px;
+
+            transition: 0.25s;
+        }
+
+
+        .home:hover {
+
+            background:
+                rgba(0,212,255,0.10);
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding:
+                65px 20px;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            text-align: center;
+
+            margin-bottom: 40px;
+        }
+
+
+        .badge {
+
+            display: inline-block;
+
+            padding:
+                7px 15px;
+
+            border-radius: 50px;
+
+            background:
+                rgba(0,212,255,0.08);
+
+            border:
+                1px solid rgba(0,212,255,0.25);
+
+            color: #67ddff;
+
+            font-size:
+                0.82rem;
+
+            font-weight:
+                800;
+
+            margin-bottom: 18px;
+        }
+
+
+        h1 {
+
+            font-size:
+                clamp(2.2rem, 6vw, 4rem);
+
+            line-height:
+                1.05;
+
+            margin-bottom:
+                18px;
+        }
+
+
+        .gradient {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #00d4ff
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+        }
+
+
+        .hero p {
+
+            max-width:
+                760px;
+
+            margin:
+                auto;
+
+            color:
+                #a9bfd4;
+
+            font-size:
+                1.05rem;
+        }
+
+
+        /* =====================================================
+           SAFETY NOTICE
+        ===================================================== */
+
+        .notice {
+
+            margin-bottom:
+                25px;
+
+            padding:
+                18px 20px;
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255,180,0,0.08);
+
+            border:
+                1px solid rgba(255,180,0,0.25);
+
+            color:
+                #ffe09a;
+        }
+
+
+        /* =====================================================
+           WORKFLOW
+        ===================================================== */
+
+        .workflow {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                8px;
+
+            margin-bottom:
+                25px;
+
+            overflow-x:
+                auto;
+
+            padding-bottom:
+                5px;
+        }
+
+
+        .workflow-step {
+
+            min-width:
+                130px;
+
+            text-align:
+                center;
+
+            color:
+                #637b91;
+
+            font-size:
+                0.78rem;
+        }
+
+
+        .step-number {
+
+            width:
+                38px;
+
+            height:
+                38px;
+
+            margin:
+                0 auto 7px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            background:
+                #0b1b2e;
+
+            font-weight:
+                800;
+        }
+
+
+        .workflow-step.active {
+
+            color:
+                #67ddff;
+        }
+
+
+        .workflow-step.active .step-number {
+
+            border-color:
+                #00d4ff;
+
+            color:
+                #00d4ff;
+
+            box-shadow:
+                0 0 20px
+                rgba(0,212,255,0.15);
+        }
+
+
+        /* =====================================================
+           MAIN PANEL
+        ===================================================== */
+
+        .panel {
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            border-radius:
+                20px;
+
+            padding:
+                30px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.20);
+        }
+
+
+        /* =====================================================
+           FORM SECTIONS
+        ===================================================== */
+
+        .form-section {
+
+            margin-bottom:
+                28px;
+
+            padding:
+                24px;
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+
+        .section-number {
+
+            color:
+                #00d4ff;
+
+            font-size:
+                0.78rem;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+            margin-bottom:
+                5px;
+        }
+
+
+        .form-section h2 {
+
+            font-size:
+                1.25rem;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .help-text {
+
+            color:
+                #8097ad;
+
+            font-size:
+                0.88rem;
+
+            margin-bottom:
+                18px;
+        }
+
+
+        label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            font-weight:
+                700;
+
+            color:
+                #dcebf7;
+        }
+
+
+        select,
+        textarea {
+
+            width:
+                100%;
+
+            background:
+                #0b1b2e;
+
+            color:
+                #edf7ff;
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            border-radius:
+                11px;
+
+            padding:
+                13px;
+
+            font-size:
+                0.96rem;
+
+            outline:
+                none;
+
+            transition:
+                0.2s;
+        }
+
+
+        select:focus,
+        textarea:focus {
+
+            border-color:
+                #00d4ff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0,212,255,0.08);
+        }
+
+
+        select {
+
+            cursor:
+                pointer;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        textarea {
+
+            min-height:
+                130px;
+
+            resize:
+                vertical;
+        }
+
+
+        .small-note {
+
+            color:
+                #667f96;
+
+            font-size:
+                0.78rem;
+
+            margin-top:
+                7px;
+        }
+
+
+        /* =====================================================
+           OPTION GRID
+        ===================================================== */
+
+        .option-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+
+            gap:
+                12px;
+
+            margin-top:
+                12px;
+        }
+
+
+        .option {
+
+            position:
+                relative;
+        }
+
+
+        .option input {
+
+            position:
+                absolute;
+
+            opacity:
+                0;
+        }
+
+
+        .option label {
+
+            display:
+                block;
+
+            padding:
+                15px;
+
+            border-radius:
+                12px;
+
+            background:
+                #0b1b2e;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.10);
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s;
+
+            color:
+                #b7c9d9;
+
+            font-weight:
+                600;
+        }
+
+
+        .option label:hover {
+
+            border-color:
+                rgba(0,212,255,0.35);
+        }
+
+
+        .option input:checked + label {
+
+            border-color:
+                #00d4ff;
+
+            background:
+                rgba(0,212,255,0.08);
+
+            color:
+                #67ddff;
+        }
+
+
+        /* =====================================================
+           CHARACTER COUNTER
+        ===================================================== */
+
+        .counter {
+
+            text-align:
+                right;
+
+            color:
+                #667f96;
+
+            font-size:
+                0.78rem;
+
+            margin-top:
+                6px;
+        }
+
+
+        /* =====================================================
+           ANALYZE BUTTON
+        ===================================================== */
+
+        .analyze-button {
+
+            width:
+                100%;
+
+            border:
+                none;
+
+            border-radius:
+                12px;
+
+            padding:
+                17px;
+
+            font-size:
+                1rem;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+            color:
+                #04111d;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #00d4ff,
+                    #62e8ff
+                );
+
+            transition:
+                0.25s;
+        }
+
+
+        .analyze-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0,212,255,0.18);
+        }
+
+
+        .analyze-button:disabled {
+
+            opacity:
+                0.65;
+
+            cursor:
+                wait;
+
+            transform:
+                none;
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error {
+
+            margin-top:
+                20px;
+
+            padding:
+                15px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,70,70,0.08);
+
+            border:
+                1px solid
+                rgba(255,70,70,0.25);
+
+            color:
+                #ffb0b0;
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result {
+
+            margin-top:
+                40px;
+
+            padding-top:
+                35px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.08);
+        }
+
+
+        .result-title {
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .result-title .label {
+
+            color:
+                #00d4ff;
+
+            font-size:
+                0.78rem;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .result-title h2 {
+
+            margin-top:
+                6px;
+
+            font-size:
+                1.8rem;
+        }
+
+
+        .assessment {
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0,212,255,0.10),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid
+                rgba(0,212,255,0.20);
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .assessment-top {
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                10px;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                15px;
+        }
+
+
+        .badge-pill {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                6px 12px;
+
+            border-radius:
+                50px;
+
+            font-size:
+                0.78rem;
+
+            font-weight:
+                800;
+        }
+
+
+        .risk-low {
+
+            background:
+                rgba(80,210,130,0.12);
+
+            color:
+                #73e6a0;
+        }
+
+
+        .risk-medium {
+
+            background:
+                rgba(255,190,50,0.12);
+
+            color:
+                #ffd66b;
+        }
+
+
+        .risk-high {
+
+            background:
+                rgba(255,130,50,0.12);
+
+            color:
+                #ffad70;
+        }
+
+
+        .risk-critical {
+
+            background:
+                rgba(255,70,70,0.13);
+
+            color:
+                #ff8f8f;
+        }
+
+
+        .risk-uncertain {
+
+            background:
+                rgba(160,170,185,0.12);
+
+            color:
+                #b7c2cf;
+        }
+
+
+        .confidence {
+
+            color:
+                #9db2c7;
+
+            font-size:
+                0.84rem;
+        }
+
+
+        .summary {
+
+            color:
+                #c1d2e1;
+
+            line-height:
+                1.8;
+        }
+
+
+        /* =====================================================
+           RESULT GRID
+        ===================================================== */
+
+        .result-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(300px,1fr)
+                );
+
+            gap:
+                18px;
+        }
+
+
+        .result-card {
+
+            padding:
+                23px;
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+        }
+
+
+        .result-card h3 {
+
+            margin-bottom:
+                14px;
+
+            font-size:
+                1.05rem;
+        }
+
+
+        .result-card ul,
+        .result-card ol {
+
+            padding-left:
+                22px;
+        }
+
+
+        .result-card li {
+
+            margin-bottom:
+                10px;
+
+            color:
+                #b7c9d9;
+        }
+
+
+        .action-card {
+
+            border-color:
+                rgba(90,220,150,0.22);
+        }
+
+
+        .danger-card {
+
+            border-color:
+                rgba(255,100,100,0.22);
+        }
+
+
+        .money-card {
+
+            border-color:
+                rgba(255,180,70,0.22);
+        }
+
+
+        /* =====================================================
+           RESPONSE ALGORITHM
+        ===================================================== */
+
+        .algorithm {
+
+            margin-top:
+                22px;
+
+            padding:
+                25px;
+
+            border-radius:
+                18px;
+
+            background:
+                #091827;
+
+            border:
+                1px solid
+                rgba(0,212,255,0.12);
+        }
+
+
+        .algorithm h3 {
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .algorithm-step {
+
+            display:
+                flex;
+
+            gap:
+                15px;
+
+            padding:
+                15px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.06);
+        }
+
+
+        .algorithm-step:last-child {
+
+            border-bottom:
+                none;
+        }
+
+
+        .algorithm-number {
+
+            min-width:
+                34px;
+
+            height:
+                34px;
+
+            border-radius:
+                50%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                rgba(0,212,255,0.10);
+
+            border:
+                1px solid
+                rgba(0,212,255,0.25);
+
+            color:
+                #67ddff;
+
+            font-weight:
+                800;
+        }
+
+
+        .algorithm-content strong {
+
+            display:
+                block;
+
+            margin-bottom:
+                3px;
+        }
+
+
+        .algorithm-content span {
+
+            color:
+                #8da4b9;
+
+            font-size:
+                0.88rem;
+        }
+
+
+        /* =====================================================
+           DISCLAIMER
+        ===================================================== */
+
+        .disclaimer {
+
+            margin-top:
+                25px;
+
+            padding:
+                17px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,0.03);
+
+            color:
+                #8499ad;
+
+            font-size:
+                0.84rem;
+
+            line-height:
+                1.7;
+        }
+
+
+        footer {
+
+            text-align:
+                center;
+
+            padding:
+                30px;
+
+            color:
+                #6f859b;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            margin-top:
+                50px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+            nav {
+
+                padding:
+                    15px 5%;
+            }
+
+            .container {
+
+                padding:
+                    45px 15px;
+            }
+
+            .panel {
+
+                padding:
+                    18px;
+            }
+
+            .form-section {
+
+                padding:
+                    18px;
+            }
+
+            .workflow {
+
+                justify-content:
+                    flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     NAVIGATION
+======================================================= -->
+
+<nav>
+
+    <a
+        href="{{ url_for('index') }}"
+        class="logo"
+    >
+        CYBER<span>SECURITY</span>
+    </a>
+
+
+    <a
+        href="{{ url_for('index') }}"
+        class="home"
+    >
+        ← Home
+    </a>
+
+</nav>
+
+
+<main class="container">
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+    <div class="badge">
+        AI-POWERED CYBERSECURITY INCIDENT RESPONSE
+    </div>
+
+
+    <h1>
+
+        Cyber Scam
+
+        <span class="gradient">
+            Help Center
+        </span>
+
+    </h1>
+
+
+    <p>
+
+        Follow the guided assessment process below.
+        Provide only safe, non-sensitive information and
+        receive an AI-assisted incident classification,
+        risk assessment and step-by-step response plan.
+
+    </p>
+
+</section>
+
+
+<!-- =======================================================
+     SAFETY NOTICE
+======================================================= -->
+
+<div class="notice">
+
+    ⚠️ <strong>Security rule:</strong>
+
+    Never enter passwords, OTPs, UPI PINs, ATM PINs,
+    CVVs, full card numbers, banking passwords,
+    recovery codes or private keys.
+
+</div>
+
+
+<!-- =======================================================
+     WORKFLOW INDICATOR
+======================================================= -->
+
+<div class="workflow">
+
+    <div class="workflow-step active">
+        <div class="step-number">01</div>
+        Situation
+    </div>
+
+    <div class="workflow-step active">
+        <div class="step-number">02</div>
+        Event
+    </div>
+
+    <div class="workflow-step active">
+        <div class="step-number">03</div>
+        Request
+    </div>
+
+    <div class="workflow-step active">
+        <div class="step-number">04</div>
+        Action
+    </div>
+
+    <div class="workflow-step active">
+        <div class="step-number">05</div>
+        Impact
+    </div>
+
+    <div class="workflow-step active">
+        <div class="step-number">06</div>
+        Analysis
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MAIN PANEL
+======================================================= -->
+
+<section class="panel">
+
+
+<form
+    method="POST"
+    onsubmit="showLoading()"
+>
+
+
+<!-- =====================================================
+     STEP 01
+===================================================== -->
+
+<div class="form-section">
+
+    <div class="section-number">
+        STEP 01 / INCIDENT TYPE
+    </div>
+
+    <h2>
+        What type of situation are you dealing with?
+    </h2>
+
+    <p class="help-text">
+        Choose the category that most closely matches
+        what happened. If you are unsure, select
+        "Other / Unclear".
+    </p>
+
+
+    <select
+        id="category"
+        name="category"
+        required
+    >
+
+        <option value="Other / Unclear">
+            I am not sure / Other
+        </option>
+
+        <option value="UPI / Payment Scam">
+            UPI / Payment Scam
+        </option>
+
+        <option value="Bank / KYC Scam">
+            Bank / KYC Scam
+        </option>
+
+        <option value="Job Scam">
+            Job Scam
+        </option>
+
+        <option value="Investment Scam">
+            Investment Scam
+        </option>
+
+        <option value="Courier Scam">
+            Courier Scam
+        </option>
+
+        <option value="OTP Scam">
+            OTP Scam
+        </option>
+
+        <option value="WhatsApp / Social Media Scam">
+            WhatsApp / Social Media Scam
+        </option>
+
+        <option value="Government Impersonation">
+            Government Impersonation
+        </option>
+
+        <option value="Loan App Scam">
+            Loan App Scam
+        </option>
+
+        <option value="QR Code Scam">
+            QR Code Scam
+        </option>
+
+        <option value="Money Already Lost">
+            Money Already Lost
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- =====================================================
+     STEP 02
+===================================================== -->
+
+<div class="form-section">
+
+    <div class="section-number">
+        STEP 02 / INCIDENT DESCRIPTION
+    </div>
+
+    <h2>
+        What happened?
+    </h2>
+
+    <p class="help-text">
+        Describe the event in your own words. Do not include
+        passwords, OTPs, PINs, card numbers or other secrets.
+    </p>
+
+
+    <textarea
+        id="description"
+        name="description"
+        maxlength="6000"
+        required
+        placeholder="Example: I received a WhatsApp message claiming to be from my bank. The person said my KYC would expire and asked me to verify my account through a link."
+    ></textarea>
+
+
+    <div class="counter">
+
+        <span id="charCount">0</span>
+        / 6000 characters
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     STEP 03
+===================================================== -->
+
+<div class="form-section">
+
+    <div class="section-number">
+        STEP 03 / REQUEST MADE BY THE OTHER PERSON
+    </div>
+
+    <h2>
+        What were you asked to do?
+    </h2>
+
+    <p class="help-text">
+        Select the actions the person, message, website or
+        caller requested. Select all that apply.
+    </p>
+
+
+    <div class="option-grid">
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-link"
+                name="requested_action"
+                value="Click a link"
+            >
+
+            <label for="req-link">
+                Open or click a link
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-otp"
+                name="requested_action"
+                value="Share OTP"
+            >
+
+            <label for="req-otp">
+                Share an OTP
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-payment"
+                name="requested_action"
+                value="Make a payment"
+            >
+
+            <label for="req-payment">
+                Make a payment
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-install"
+                name="requested_action"
+                value="Install an application"
+            >
+
+            <label for="req-install">
+                Install an application
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-remote"
+                name="requested_action"
+                value="Give remote access"
+            >
+
+            <label for="req-remote">
+                Give remote access
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-credentials"
+                name="requested_action"
+                value="Provide account information"
+            >
+
+            <label for="req-credentials">
+                Provide account information
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-qr"
+                name="requested_action"
+                value="Scan a QR code"
+            >
+
+            <label for="req-qr">
+                Scan a QR code
+            </label>
+
+        </div>
+
+
+        <div class="option">
+
+            <input
+                type="checkbox"
+                id="req-transfer"
+                name="requested_action"
+                value="Transfer money"
+            >
+
+            <label for="req-transfer">
+                Transfer money
+            </label>
+
+        </div>
+
+
+    </div>
+
+
+    <p class="small-note">
+        Select only what you can safely describe.
+        Never enter the actual secret value.
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     STEP 04
+===================================================== -->
+
+<div class="form-section">
+
+    <div class="section-number">
+        STEP 04 / YOUR ACTION
+    </div>
+
+    <h2>
+        What happened after the request?
+    </h2>
+
+    <p class="help-text">
+        Choose the situation that best describes your response.
+    </p>
+
+
+    <select
+        name="user_action"
+        required
+    >
+
+        <option value="I did nothing">
+            I did nothing
+        </option>
+
+        <option value="I clicked a link">
+            I clicked a link
+        </option>
+
+        <option value="I replied to the person">
+            I replied to the person
+        </option>
+
+        <option value="I shared non-sensitive information">
+            I shared non-sensitive information
+        </option>
+
+        <option value="I installed an application">
+            I installed an application
+        </option>
+
+        <option value="I gave remote access">
+            I gave remote access
+        </option>
+
+        <option value="I made a payment">
+            I made a payment
+        </option>
+
+        <option value="I am not sure">
+            I am not sure
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- =====================================================
+     STEP 05
+===================================================== -->
+
+<div class="form-section">
+
+    <div class="section-number">
+        STEP 05 / CURRENT IMPACT
+    </div>
+
+    <h2>
+        What is the current situation?
+    </h2>
+
+    <p class="help-text">
+        Select the option that best describes what is happening now.
+    </p>
+
+
+    <select
+        name="current_status"
+        required
+    >
+
+        <option value="No known loss or account impact">
+            No known loss or account impact
+        </option>
+
+        <option value="Suspicious activity noticed">
+            Suspicious activity noticed
+        </option>
+
+        <option value="Account may be compromised">
+            Account may be compromised
+        </option>
+
+        <option value="Money may have been lost">
+            Money may have been lost
+        </option>
+
+        <option value="Money has been lost">
+            Money has been lost
+        </option>
+
+        <option value="Device may be compromised">
+            Device may be compromised
+        </option>
+
+        <option value="I am unsure">
+            I am unsure
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- =====================================================
+     SUBMIT
+===================================================== -->
+
+<button
+    id="analyzeButton"
+    class="analyze-button"
+    type="submit"
+>
+
+    🔍 START AI SECURITY ASSESSMENT
+
+</button>
+
+
+</form>
+
+
+<!-- =======================================================
+     ERROR
+======================================================= -->
+
+{% if error %}
+
+<div class="error">
+
+    ⚠️ <strong>Assessment Error</strong>
+
+    <br>
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+<!-- =======================================================
+     AI RESULT
+======================================================= -->
+
+{% if result %}
+
+<section class="result">
+
+
+    <div class="result-title">
+
+        <div class="label">
+            AI INCIDENT ASSESSMENT
+        </div>
+
+        <h2>
+            Security Assessment Complete
+        </h2>
+
+    </div>
+
+
+    <!-- =================================================
+         INCIDENT CLASSIFICATION
+    ================================================== -->
+
+    <div class="assessment">
+
+        <div class="assessment-top">
+
+            <strong>
+                Incident Category:
+            </strong>
+
+            <span>
+                {{ result.scam_category }}
+            </span>
+
+            <span
+                class="badge-pill risk-{{ result.risk_level|lower }}"
+            >
+
+                ● {{ result.risk_level }} RISK
+
+            </span>
+
+            <span class="confidence">
+
+                Confidence:
+                {{ result.confidence }}
+
+            </span>
+
+        </div>
+
+
+        <p class="summary">
+
+            {{ result.summary }}
+
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         RESPONSE ALGORITHM
+    ================================================== -->
+
+    <div class="algorithm">
+
+        <h3>
+            🧭 Recommended Response Algorithm
+        </h3>
+
+
+        {% if result.do_now %}
+
+            {% for item in result.do_now %}
+
+            <div class="algorithm-step">
+
+                <div class="algorithm-number">
+
+                    {{ loop.index }}
+
+                </div>
+
+                <div class="algorithm-content">
+
+                    <strong>
+                        Immediate Response Step {{ loop.index }}
+                    </strong>
+
+                    <span>
+                        {{ item }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =================================================
+         RESULT CARDS
+    ================================================== -->
+
+    <div class="result-grid">
+
+
+        <!-- WARNING INDICATORS -->
+
+        <div class="result-card">
+
+            <h3>
+                🔎 Warning Indicators Detected
+            </h3>
+
+            <ul>
+
+                {% for item in result.indicators %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+        <!-- INFORMATION AT RISK -->
+
+        <div class="result-card">
+
+            <h3>
+                🔐 Potentially Exposed Information
+            </h3>
+
+            <ul>
+
+                {% for item in result.information_at_risk %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+        <!-- DO NOT -->
+
+        <div class="result-card danger-card">
+
+            <h3>
+                ❌ Actions To Avoid
+            </h3>
+
+            <ul>
+
+                {% for item in result.do_not %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+        <!-- MONEY -->
+
+        <div class="result-card money-card">
+
+            <h3>
+                🚨 If Money Was Lost
+            </h3>
+
+            <ol>
+
+                {% for item in result.if_money_lost %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ol>
+
+        </div>
+
+
+        <!-- VERIFICATION -->
+
+        <div class="result-card">
+
+            <h3>
+                ✅ Verification Procedure
+            </h3>
+
+            <ul>
+
+                {% for item in result.verification_advice %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         DISCLAIMER
+    ================================================== -->
+
+    <div class="disclaimer">
+
+        🤖 <strong>AI-assisted assessment:</strong>
+
+        This system analyzes the information supplied by
+        the user and identifies possible cybersecurity
+        warning signs. It does not establish that a person,
+        organization, message or website is fraudulent.
+
+        Do not use this tool to submit confidential
+        credentials or other authentication secrets.
+
+        For important incidents, independently verify
+        information through the relevant organization's
+        official channels.
+
+    </div>
+
+
+</section>
+
+{% endif %}
+
+
+</section>
+
+</main>
+
+
+<footer>
+
+    🛡️ Cybersecurity Platform Kit
+
+    <br>
+
+    AI-assisted cybersecurity awareness,
+    incident assessment and safety guidance.
+
+</footer>
+
+
+<script>
+
+
+/* =========================================================
+   CHARACTER COUNTER
+========================================================= */
+
+const description =
+    document.getElementById(
+        "description"
+    );
+
+
+const charCount =
+    document.getElementById(
+        "charCount"
+    );
+
+
+if (description) {
+
+    description.addEventListener(
+        "input",
+        function () {
+
+            charCount.textContent =
+                this.value.length;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+function showLoading() {
+
+    const button =
+        document.getElementById(
+            "analyzeButton"
+        );
+
+
+    if (button) {
+
+        button.innerText =
+            "🤖 ANALYZING INCIDENT...";
+
+        button.disabled =
+            true;
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
