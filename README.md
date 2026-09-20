@@ -12,6 +12,15 @@ The main objective of this project is to promote cybersecurity awareness and hel
 
 ### Platform Objectives
 
+# 🌐 Live Application
+
+## Cybersecurity Awareness Platform Kit
+
+### Live Deployment
+
+https://cybersecurity-platformandkit.onrender.com/
+
+
 #### 🛡️ Cybersecurity Awareness
 
 Help beginners understand common cybersecurity threats and safer digital practices.
@@ -1945,13 +1954,6 @@ Defensive Security Learning
 
 ---
 
-# 🌐 Live Application
-
-## Cybersecurity Awareness Platform Kit
-
-### Live Deployment
-
-https://cybersecurity-platformandkit.onrender.com/
 
 ### 🌐 Future Domain
 
