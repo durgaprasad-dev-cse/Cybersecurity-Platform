@@ -1,6 +1,6 @@
 # 🛡️ Cybersecurity Awareness Platform Kit
 
-A beginner-friendly cybersecurity awareness and security-analysis platform designed to help users understand common cyber threats, practice identifying phishing attacks, evaluate password strength, generate strong passwords, analyze URLs and files, inspect APK security characteristics, and learn basic network-security concepts.
+A beginner-friendly cybersecurity awareness and security-analysis platform designed to help users understand common cyber threats, practice identifying phishing attacks, evaluate password strength, generate passwords, analyze URLs and files, inspect APK security characteristics, and learn basic network-security concepts.
 
 The project combines multiple cybersecurity learning utilities into one web platform built with **Python and Flask**, with an evolving **AI Cybersecurity Agent** designed to provide intelligent security-risk analysis.
 
@@ -8,20 +8,24 @@ The project combines multiple cybersecurity learning utilities into one web plat
 
 ## 🎯 Project Objective
 
-The main objective of this project is to promote cybersecurity awareness and help users develop safer digital habits through practical, interactive security tools.
+The main objective of this project is to promote cybersecurity awareness and help users develop safer digital habits through practical and interactive security tools.
 
-The platform provides educational demonstrations and security-analysis utilities covering:
+### Platform Objectives
 
-- 🛡️ Cybersecurity awareness
-- 🎣 Phishing awareness
-- 🔐 Password security
-- 🔑 Strong password generation
-- 🔎 TCP port scanning
-- 🌐 URL security analysis
-- 📄 File safety analysis
-- 📱 APK security analysis
-- 🦠 VirusTotal threat intelligence integration
-- 🤖 AI-powered cybersecurity analysis
+#### 🛡️ Cybersecurity Awareness
+Help beginners understand common cybersecurity threats and safer digital practices.
+
+#### 🎣 Phishing Awareness
+Teach users how phishing attacks work and how suspicious messages and websites can be recognized.
+
+#### 🔐 Password Security
+Help users understand password strength and secure password practices.
+
+#### 🌐 Security Analysis
+Provide basic tools for analyzing URLs, files, APKs, and network ports.
+
+#### 🤖 AI-Assisted Security
+Develop an AI Cybersecurity Agent for intelligent threat analysis and security recommendations.
 
 ---
 
@@ -31,57 +35,114 @@ The platform provides educational demonstrations and security-analysis utilities
 
 Provides educational information about common cybersecurity threats and safer digital practices.
 
-### Topics Include
+### Topics Covered
 
-- Cybersecurity fundamentals
-- Online safety
-- Social engineering
-- Phishing
-- Password security
-- Account protection
-- Safe browsing practices
-- Cyber hygiene
+#### 🔹 Cybersecurity Fundamentals
+Basic concepts of cybersecurity, threats, vulnerabilities, and security practices.
+
+#### 🔹 Online Safety
+Guidelines for staying safe while using websites, applications, and online services.
+
+#### 🔹 Social Engineering
+Understanding how attackers manipulate people into revealing sensitive information.
+
+#### 🔹 Phishing
+Learning how fraudulent messages, links, and websites attempt to deceive users.
+
+#### 🔹 Password Security
+Understanding strong passwords, password reuse, and password protection.
+
+#### 🔹 Account Protection
+Practices for protecting online accounts from unauthorized access.
+
+#### 🔹 Safe Browsing
+Understanding safer browsing habits and suspicious website indicators.
+
+#### 🔹 Cyber Hygiene
+Learning everyday security practices that reduce digital risks.
 
 ---
 
 ## 2. 🎣 Phishing Demo
 
-An educational phishing demonstration designed to help users understand how phishing attacks work and how attackers may attempt to collect sensitive information.
+An educational phishing demonstration designed to help users understand how phishing attacks work.
 
-It helps users recognize suspicious:
+### Purpose
 
-- Links
-- Messages
-- Emails
-- Login pages
-- Requests for sensitive information
+The demonstration helps users recognize suspicious:
 
-> **Educational Purpose Only:** This feature is designed to demonstrate phishing concepts and improve security awareness. It should not be used to collect real credentials or target real users.
+#### 🔹 Links
+Suspicious or unexpected links that may lead to fraudulent websites.
+
+#### 🔹 Messages
+Messages designed to create urgency or fear.
+
+#### 🔹 Emails
+Emails requesting sensitive information or asking users to click suspicious links.
+
+#### 🔹 Login Pages
+Fake login interfaces designed to imitate legitimate services.
+
+#### 🔹 Sensitive Information Requests
+Requests for passwords, OTPs, banking information, or other confidential information.
+
+### ⚠️ Educational Purpose
+
+> **Educational Purpose Only:** This feature is designed to demonstrate phishing concepts and improve security awareness.
+
+#### Security Principle
+
+The demonstration should not be used to:
+
+- Collect real credentials
+- Target real users
+- Impersonate real organizations
+- Conduct real phishing attacks
 
 ---
 
 ## 3. 🔐 Password Strength Checker
 
-Allows users to evaluate the strength of a password using local security heuristics.
+Allows users to evaluate password strength using local security heuristics.
 
-The password can be categorized into:
+### Password Classification
 
-- Normal
-- Medium
-- Strong
+#### 🟢 Normal
+A password with basic characteristics but limited complexity.
 
-The analyzer considers characteristics such as:
+#### 🟡 Medium
+A password containing several security characteristics but requiring improvement.
 
-- Password length
-- Uppercase characters
-- Lowercase characters
-- Numbers
-- Special characters
-- Common password patterns
+#### 🔴 Strong
+A password containing multiple complexity characteristics and sufficient length.
+
+### Security Factors
+
+#### 🔹 Password Length
+Longer passwords generally provide better resistance against guessing attacks.
+
+#### 🔹 Uppercase Characters
+The presence of uppercase letters increases character diversity.
+
+#### 🔹 Lowercase Characters
+Lowercase characters contribute to password complexity.
+
+#### 🔹 Numbers
+Numbers increase the possible character combinations.
+
+#### 🔹 Special Characters
+Special characters can increase password complexity.
+
+#### 🔹 Common Password Patterns
+Common or predictable password patterns can reduce security.
 
 ### 🔒 Privacy
 
+#### Local Analysis
+
 Passwords are analyzed locally by the application and are not intentionally stored as part of the analysis process.
+
+#### Educational Purpose
 
 The feature is designed for cybersecurity education and password-security awareness.
 
@@ -89,71 +150,110 @@ The feature is designed for cybersecurity education and password-security awaren
 
 ## 4. 🔑 Strong Password Generator
 
-Generates strong random passwords using Python's secure random-generation facilities.
+Generates random password candidates using a configurable character set.
+
+### Password Characteristics
 
 The generator demonstrates the importance of using:
 
-- Uppercase letters
-- Lowercase letters
-- Numbers
-- Special characters
-- Sufficient password length
+#### 🔹 Uppercase Letters
+Examples include:
 
-### Default Generated Password Length
+```text
+A B C D E
+🔹 Lowercase Letters
 
-**18 characters**
+Examples include:
+
+a b c d e
+🔹 Numbers
+
+Examples include:
+
+0 1 2 3 4 5
+🔹 Special Characters
+
+Examples include:
+
+@ # $ % & !
+🔹 Sufficient Length
+
+Longer passwords generally provide more possible combinations.
+
+Default Password Length
+🔐 18 Characters
 
 The generated passwords are intended for demonstration and security-awareness purposes.
 
----
+⚠️ Security Note
 
-## 5. 🔎 Port Scanner
+For production authentication systems, passwords should be generated using cryptographically secure random functions and should never be stored in plaintext.
+
+5. 🔎 Port Scanner
 
 The Port Scanner performs a TCP connection scan against a specified hostname or IP address.
 
-The scanner is designed to demonstrate basic network-security and port-scanning concepts.
+The scanner demonstrates basic network-security and port-scanning concepts.
 
-### Features
+Scanner Features
+🔹 Port Range
 
-- Scans TCP ports from 1 to 1024 by default
-- Uses concurrent scanning for faster results
-- Applies a connection timeout
-- Resolves hostnames before scanning
-- Detects accessible TCP ports
-- Displays open ports in numerical order
-- Handles invalid or unreachable targets gracefully
-- Prevents indefinite waiting during individual connection attempts
+The default scanner checks TCP ports:
 
-### Example
+1 → 1024
+🔹 Concurrent Scanning
+
+Multiple ports can be checked concurrently to improve scanning performance.
+
+🔹 Connection Timeout
+
+A connection timeout prevents the scanner from waiting indefinitely for an individual port.
+
+🔹 Hostname Resolution
+
+Hostnames can be resolved before scanning.
+
+🔹 Open Port Detection
+
+The scanner identifies TCP ports that accept connections.
+
+🔹 Numerical Ordering
+
+Detected open ports can be displayed in numerical order.
+
+🔹 Error Handling
+
+Invalid or unreachable targets are handled gracefully.
+
+Example
 
 Enter a target such as:
 
-```text
 127.0.0.1
 
-The default scanner checks:
+The scanner checks the configured port range:
 
 1 → 1024
 
 For example, if a local service is listening on a port within the configured range, the scanner can report that port as open.
 
 🔒 Security Notice
+Authorized Systems Only
 
 Use the Port Scanner only against:
 
 Systems you own
-Your own lab environment
+Your own laboratory environment
 Authorized testing environments
 Systems for which you have explicit permission
 
-Do not scan systems or networks without authorization.
+Never scan systems or networks without authorization.
 
 6. 🌐 URL & File Safety Analyzer
 
 The URL & File Safety Analyzer is one of the main security-analysis features of the platform.
 
-It provides two analysis modes:
-
+Analyzer Architecture
              URL & FILE SAFETY ANALYZER
                        │
               ┌────────┴────────┐
@@ -169,19 +269,45 @@ Local URL Analysis
 
 The application examines characteristics such as:
 
-HTTPS usage
-IP-address-based URLs
-Suspicious keywords
-URL length
-Encoded characters
-Suspicious URL patterns
-Excessive subdomains
-The @ character in URLs
-Credential-related terms
-Brand-impersonation patterns
-Suspicious URL structure
+🔹 HTTPS Usage
 
-These checks can identify characteristics commonly associated with suspicious URLs.
+Checks whether the URL uses HTTPS.
+
+🔹 IP-Based URLs
+
+Identifies URLs that directly use IP addresses instead of domain names.
+
+🔹 Suspicious Keywords
+
+Checks for keywords commonly associated with suspicious activity.
+
+🔹 URL Length
+
+Very long URLs can sometimes contain suspicious or obfuscated parameters.
+
+🔹 Encoded Characters
+
+Checks for encoded or unusual URL characters.
+
+🔹 Suspicious URL Patterns
+
+Examines unusual URL structures.
+
+🔹 Excessive Subdomains
+
+Identifies unusually complex subdomain structures.
+
+🔹 @ Character
+
+Checks for potentially deceptive URL structures involving the @ character.
+
+🔹 Credential-Related Terms
+
+Looks for terms associated with login or credential collection.
+
+🔹 Brand Impersonation
+
+Checks for patterns that may resemble legitimate brands or services.
 
 Important: URL structure alone cannot prove that a website is malicious or safe.
 
@@ -189,62 +315,132 @@ Important: URL structure alone cannot prove that a website is malicious or safe.
 
 The platform can integrate with the VirusTotal API to obtain additional threat-intelligence information.
 
-The application can:
+VirusTotal Workflow
+Step 1 — Receive URL
 
-Receive the submitted URL
-Perform local analysis
-Submit the URL to VirusTotal
-Retrieve the available analysis
-Process the security-engine results
-Present the information through the application's own security-report interface
-VirusTotal Information Can Include
-Malicious detections
-Suspicious detections
-Harmless results
-Undetected results
-Security-vendor detections
-Analysis status
-Phishing-related detections when reported by engines
-Redirect information when available
-Final URL information when available
-Example Workflow
+The application receives the URL submitted by the user.
+
+Step 2 — Local Analysis
+
+The URL is analyzed using local security heuristics.
+
+Step 3 — VirusTotal Request
+
+The URL can be submitted to VirusTotal when integration is configured.
+
+Step 4 — Retrieve Analysis
+
+Available threat-intelligence information is retrieved.
+
+Step 5 — Process Results
+
+Security-engine results are processed by the application.
+
+Step 6 — Generate Report
+
+The information is presented through the application's security-report interface.
+
+VirusTotal Information
+
+VirusTotal information can include:
+
+🔹 Malicious Detections
+
+Security engines that identify potentially malicious behavior.
+
+🔹 Suspicious Detections
+
+Security engines that classify the resource as suspicious.
+
+🔹 Harmless Results
+
+Engines that do not identify malicious behavior.
+
+🔹 Undetected Results
+
+Engines that do not provide a malicious detection.
+
+🔹 Security-Engine Detections
+
+Results reported by individual security engines.
+
+🔹 Analysis Status
+
+The current status of the analysis.
+
+🔹 Phishing Detections
+
+Phishing-related detections when reported by security engines.
+
+🔹 Redirect Information
+
+Redirect information when available.
+
+🔹 Final URL
+
+The final destination URL when available.
+
+URL Analysis Workflow
 User enters URL
        │
        ▼
 Flask receives URL
        │
        ▼
-Local URL analysis
+Local URL Analysis
        │
        ▼
-VirusTotal API request
+VirusTotal API Request
        │
        ▼
-Threat-intelligence response
+Threat Intelligence Response
        │
        ▼
-Result processing
+Result Processing
        │
        ▼
-Security report
+Security Report
        │
        ▼
-User sees analysis
+User Views Analysis
 🧠 URL Risk Classification
 
-Depending on the available local analysis and VirusTotal results, the application can display classifications such as:
+Depending on the available analysis results, the application can display classifications such as:
 
-HIGH RISK
-MALICIOUS
-PHISHING DETECTED
-SUSPICIOUS
-NO MALICIOUS DETECTION
-NOT DETERMINED
-Important Security Principle
+🔴 HIGH RISK
+
+Multiple significant indicators may require immediate caution.
+
+🔴 MALICIOUS
+
+Available threat-intelligence results indicate malicious activity.
+
+🔴 PHISHING DETECTED
+
+Available analysis identifies characteristics associated with phishing.
+
+🟡 SUSPICIOUS
+
+One or more suspicious indicators require additional investigation.
+
+🟢 NO MALICIOUS DETECTION
+
+No malicious detection was returned by the available analysis.
+
+⚪ NOT DETERMINED
+
+Insufficient information is available to determine the security status.
+
+⚠️ Important Security Principle
+HTTPS Does Not Guarantee Safety
 
 An HTTPS connection does not automatically mean that a website is safe.
 
-Similarly, a URL with no current malicious detections should not be interpreted as an absolute guarantee that the website is safe.
+No Detection Does Not Guarantee Safety
+
+A URL with no current malicious detections should not be interpreted as an absolute guarantee that the website is safe.
+
+Threat Intelligence Changes
 
 Threat intelligence changes over time, and automated security tools cannot guarantee detection of every malicious URL.
 
@@ -252,7 +448,7 @@ Threat intelligence changes over time, and automated security tools cannot guara
 
 The platform allows users to upload supported files for local static analysis.
 
-Analysis Workflow
+File Analysis Workflow
 File Upload
      │
      ▼
@@ -272,17 +468,39 @@ Generate Security Information
      │
      ▼
 Delete Temporary File
+File Information
 
 The analyzer can collect information such as:
 
-Original filename
-File extension
-File size
-SHA-256 hash
-Security indicators
-Risk classification
+🔹 Original Filename
+
+The original name of the uploaded file.
+
+🔹 File Extension
+
+The detected file extension.
+
+🔹 File Size
+
+The size of the uploaded file.
+
+🔹 SHA-256 Hash
+
+A cryptographic hash representing the file contents.
+
+🔹 Security Indicators
+
+Potential characteristics identified during analysis.
+
+🔹 Risk Classification
+
+A preliminary risk classification based on available indicators.
+
+Temporary File Handling
 
 Temporary uploaded files are removed after processing.
+
+Security Principle: Untrusted files should be analyzed statically whenever possible and should not be executed on the production server.
 
 8. 🔐 SHA-256 File Hashing
 
@@ -290,6 +508,7 @@ The file analyzer can calculate a SHA-256 hash for an uploaded file.
 
 A hash acts as a digital fingerprint of the file.
 
+Hashing Process
 File
   │
   ▼
@@ -297,51 +516,143 @@ SHA-256 Algorithm
   │
   ▼
 Digital Fingerprint
+Hash Integrity
 
 If the contents of a file change, its SHA-256 hash will also change.
 
-SHA-256 is commonly used in cybersecurity for:
+Cybersecurity Uses
+🔹 File Identification
 
-File identification
-Malware research
-Integrity verification
-Threat intelligence
-Incident investigation
+Helps uniquely identify a particular file version.
+
+🔹 Malware Research
+
+Can be used when researching known malicious files.
+
+🔹 Integrity Verification
+
+Helps verify whether a file has changed.
+
+🔹 Threat Intelligence
+
+Hashes can be compared with threat-intelligence databases.
+
+🔹 Incident Investigation
+
+Hashes can help identify files during security investigations.
+
 9. 📱 APK Security Analyzer
 
 The APK Security Analyzer performs local static inspection of Android APK packages without executing the APK.
 
-Local APK Analysis Includes
-APK archive validation
-File count
-DEX file detection
-Native library detection
-Suspicious filenames
-AndroidManifest.xml inspection
-Security-sensitive permissions
-Application components
-Embedded URLs
-Domain extraction
-Suspicious keywords
-SHA-256 calculation
-Local risk classification
-Security-Sensitive Permissions
+Local APK Analysis
+🔹 APK Archive Validation
 
-The analyzer can identify permissions related to capabilities such as:
+Checks whether the uploaded APK can be processed as an archive.
 
-SMS access
-Phone calls
-Contacts
-Camera
-Microphone
-Location
-Storage
-Package installation
-Overlay windows
-Accessibility services
-Boot completion
-Internet communication
-Foreground services
+🔹 File Count
+
+Determines the number of files contained inside the APK.
+
+🔹 DEX Detection
+
+Identifies Android Dalvik Executable files.
+
+🔹 Native Library Detection
+
+Identifies native libraries included in the APK.
+
+🔹 Suspicious Filenames
+
+Checks for potentially suspicious filenames.
+
+🔹 AndroidManifest.xml Inspection
+
+Examines Android application manifest information.
+
+🔹 Security-Sensitive Permissions
+
+Identifies permissions associated with sensitive capabilities.
+
+🔹 Application Components
+
+Examines application components contained within the package.
+
+🔹 Embedded URLs
+
+Identifies URLs contained inside the APK.
+
+🔹 Domain Extraction
+
+Extracts domains found during static analysis.
+
+🔹 Suspicious Keywords
+
+Searches for potentially suspicious strings or keywords.
+
+🔹 SHA-256 Calculation
+
+Calculates the APK's SHA-256 hash.
+
+🔹 Local Risk Classification
+
+Produces a preliminary risk classification.
+
+🔐 Security-Sensitive Permissions
+
+The analyzer can identify permissions related to:
+
+📩 SMS Access
+
+Permissions associated with reading or sending SMS messages.
+
+📞 Phone Calls
+
+Permissions associated with phone functionality.
+
+👥 Contacts
+
+Permissions associated with accessing contacts.
+
+📷 Camera
+
+Permissions associated with camera access.
+
+🎙️ Microphone
+
+Permissions associated with microphone access.
+
+📍 Location
+
+Permissions associated with location information.
+
+💾 Storage
+
+Permissions associated with storage access.
+
+📦 Package Installation
+
+Permissions associated with application installation.
+
+🪟 Overlay Windows
+
+Permissions associated with displaying content over other applications.
+
+♿ Accessibility Services
+
+Permissions associated with accessibility functionality.
+
+🔄 Boot Completion
+
+Permissions associated with starting services after device boot.
+
+🌐 Internet Communication
+
+Permissions associated with network communication.
+
+⚙️ Foreground Services
+
+Permissions associated with foreground service operation.
 
 Important: A permission by itself does not prove that an APK is malicious. Legitimate applications may require sensitive permissions depending on their functionality.
 
@@ -349,8 +660,7 @@ Important: A permission by itself does not prove that an APK is malicious. Legit
 
 When configured, the APK analyzer can use VirusTotal to obtain additional file-threat intelligence.
 
-The workflow is:
-
+APK VirusTotal Workflow
 APK Upload
      │
      ▼
@@ -377,44 +687,105 @@ VirusTotal Hash Lookup
              │
              ▼
        Security Report
-VirusTotal Results Can Include
-Malicious detections
-Suspicious detections
-Harmless results
-Undetected results
-Security-engine detections
-File hashes
-File type
-File size
-Reputation
-Threat classifications
-Tags
+VirusTotal Results
+🔴 Malicious Detections
+
+Potential malicious classifications reported by security engines.
+
+🟡 Suspicious Detections
+
+Potentially suspicious classifications.
+
+🟢 Harmless Results
+
+Results where engines do not identify malicious behavior.
+
+⚪ Undetected Results
+
+Results without a malicious detection.
+
+🔹 Security-Engine Detections
+
+Individual engine results.
+
+🔹 File Hashes
+
+Hash information associated with the APK.
+
+🔹 File Type
+
+The detected file type.
+
+🔹 File Size
+
+The size of the analyzed APK.
+
+🔹 Reputation
+
+Available reputation information.
+
+🔹 Threat Classifications
+
+Available threat categories.
+
+🔹 Tags
+
+Additional metadata and classification tags.
 
 The application presents the available information through its own security-analysis interface.
 
-🤖 10. AI Cybersecurity Agent
+10. 🤖 AI Cybersecurity Agent
 
 The next major development direction of the Cybersecurity Awareness Platform Kit is the integration of an AI Cybersecurity Agent.
 
 The AI Cybersecurity Agent is designed to act as an intelligent security assistant that can help users analyze potentially suspicious digital resources and understand cybersecurity risks.
 
+AI Agent Goal
+
 The goal is to combine the existing cybersecurity utilities with AI-assisted threat analysis and security recommendations.
+
+Development Status: The AI Cybersecurity Agent is an evolving development direction. Only capabilities that are actually implemented in the application should be described as fully operational.
 
 🎯 AI Cybersecurity Agent Objective
 
 The primary objective of the AI Cybersecurity Agent is to provide users with an intelligent first-level security analysis of potentially suspicious digital resources.
 
-The agent is designed to:
+Planned Capabilities
+🔍 Suspicious URL Analysis
 
-🔍 Analyze suspicious URLs
-🚨 Identify potential scam indicators
-🎣 Identify phishing-related characteristics
-🌐 Analyze suspicious websites and links
-📄 Analyze potentially unsafe files
-📱 Analyze APK security characteristics
-🧠 Explain detected security indicators
-📊 Provide a risk assessment
-🛡️ Provide security recommendations
+Analyze potentially suspicious URLs and identify relevant indicators.
+
+🚨 Scam Indicator Detection
+
+Identify characteristics commonly associated with online scams.
+
+🎣 Phishing Analysis
+
+Analyze potential phishing-related characteristics.
+
+🌐 Website and Link Analysis
+
+Assist users in understanding suspicious links and website characteristics.
+
+📄 File Analysis
+
+Work alongside the existing file-analysis system.
+
+📱 APK Analysis
+
+Assist with static APK security analysis.
+
+🧠 Security Explanation
+
+Explain why particular indicators may require attention.
+
+📊 Risk Assessment
+
+Provide a preliminary security-risk classification.
+
+🛡️ Security Recommendations
+
+Provide defensive security recommendations.
 
 The system is intended to assist users in understanding potential threats rather than providing an absolute guarantee of safety.
 
@@ -454,24 +825,59 @@ The system is intended to assist users in understanding potential threats rather
               Security Recommendation
 🔎 AI Threat Analysis
 
-The AI Cybersecurity Agent can use multiple security indicators to build a preliminary risk assessment.
+The AI Cybersecurity Agent can be designed to use multiple security indicators to build a preliminary risk assessment.
 
 🌐 AI URL Analysis
 
-Potential URL indicators include:
+Potential indicators include:
 
-HTTPS usage
-IP-address-based URLs
-Suspicious URL structures
-URL length
-Suspicious keywords
-Encoded characters
-Unusual subdomains
-Excessive subdomains
-Suspicious parameters
-Credential-related terms
-Brand-impersonation patterns
-Threat-intelligence information
+🔹 HTTPS Usage
+
+Checks whether HTTPS is used.
+
+🔹 IP-Based URLs
+
+Identifies URLs that directly use an IP address.
+
+🔹 Suspicious URL Structures
+
+Identifies unusual URL construction.
+
+🔹 URL Length
+
+Examines unusually long URLs.
+
+🔹 Suspicious Keywords
+
+Checks for potentially suspicious terms.
+
+🔹 Encoded Characters
+
+Identifies potentially obfuscated URL content.
+
+🔹 Unusual Subdomains
+
+Examines unusual subdomain structures.
+
+🔹 Excessive Subdomains
+
+Identifies overly complex domain structures.
+
+🔹 Suspicious Parameters
+
+Examines potentially suspicious query parameters.
+
+🔹 Credential-Related Terms
+
+Identifies terms associated with login or credential collection.
+
+🔹 Brand-Impersonation Patterns
+
+Identifies potential impersonation characteristics.
+
+🔹 Threat Intelligence
+
+Uses available external threat-intelligence information.
 
 A URL containing one suspicious characteristic does not automatically mean that the URL is malicious.
 
@@ -481,74 +887,139 @@ The agent should consider multiple indicators before producing a risk assessment
 
 The AI Cybersecurity Agent can work alongside the existing file-analysis functionality.
 
-Potential file-analysis information includes:
+Potential File Information
+🔹 File Type
 
-File type
-File extension
-File size
-SHA-256 hash
-Metadata
-Security indicators
-Threat-intelligence results
+Identifies the type of uploaded resource.
+
+🔹 File Extension
+
+Examines the file extension.
+
+🔹 File Size
+
+Examines file size.
+
+🔹 SHA-256 Hash
+
+Uses the file hash as an identification value.
+
+🔹 Metadata
+
+Examines available file metadata.
+
+🔹 Security Indicators
+
+Analyzes available static security indicators.
+
+🔹 Threat Intelligence
+
+Uses available external threat-intelligence information.
 
 The objective is to analyze files safely without executing untrusted content.
 
 📱 AI APK Security Analysis
 
-The AI Cybersecurity Agent can also assist with static APK security analysis.
+The AI Cybersecurity Agent can assist with static APK security analysis.
 
-Potential indicators include:
+Potential APK Indicators
+🔹 Package Information
 
-Package information
-Android permissions
-Application components
-Certificate information
-Embedded URLs
-Suspicious strings
-Native libraries
-DEX files
-File hashes
-Threat-intelligence results
+Application package and metadata information.
 
-APK analysis is performed as static analysis and should not require executing the uploaded application.
+🔹 Android Permissions
+
+Security-sensitive permissions requested by the application.
+
+🔹 Application Components
+
+Activities, services, receivers, and other components.
+
+🔹 Certificate Information
+
+Available signing-certificate information.
+
+🔹 Embedded URLs
+
+URLs discovered during static analysis.
+
+🔹 Suspicious Strings
+
+Potentially suspicious strings inside the application.
+
+🔹 Native Libraries
+
+Native libraries contained within the APK.
+
+🔹 DEX Files
+
+Android executable files contained within the package.
+
+🔹 File Hashes
+
+Cryptographic identification of the APK.
+
+🔹 Threat Intelligence
+
+Available external security intelligence.
+
+APK analysis should be performed as static analysis and should not require executing the uploaded application.
 
 🚨 AI Scam Detection
 
-One of the planned capabilities of the AI Cybersecurity Agent is scam-risk analysis.
+One planned capability of the AI Cybersecurity Agent is scam-risk analysis.
 
-The system can examine characteristics commonly associated with suspicious online activity, including:
+Potential Scam Indicators
+🔹 Urgent Security Messages
 
-Urgent security messages
-Suspicious login requests
-Fake verification requests
-Requests for sensitive information
-Suspicious URLs
-Potential brand impersonation
-Unusual website structures
-Suspicious file or application characteristics
+Messages designed to pressure users into immediate action.
 
-The agent can then provide an understandable explanation of the detected indicators.
+🔹 Suspicious Login Requests
+
+Unexpected requests to log into an account.
+
+🔹 Fake Verification Requests
+
+Requests claiming that an account requires immediate verification.
+
+🔹 Sensitive Information Requests
+
+Requests for passwords, OTPs, financial information, or other confidential data.
+
+🔹 Suspicious URLs
+
+Links containing potentially suspicious characteristics.
+
+🔹 Brand Impersonation
+
+Potential imitation of legitimate organizations or services.
+
+🔹 Unusual Website Structures
+
+Website structures that may indicate suspicious activity.
+
+🔹 Suspicious Files or Applications
+
+Files or applications containing unusual security characteristics.
+
+AI Explanation
+
+The agent can provide an understandable explanation of the indicators identified during analysis.
 
 📊 AI Risk Assessment
 
 The AI Cybersecurity Agent is designed around risk assessment rather than absolute security claims.
 
-Possible classifications include:
-
+Possible Classifications
 🟢 LOW RISK
-
-🟡 SUSPICIOUS
-
-🔴 HIGH RISK
-🟢 Low Risk
 
 No significant suspicious indicators were identified by the available analysis.
 
-🟡 Suspicious
+🟡 SUSPICIOUS
 
 One or more indicators require additional investigation or caution.
 
-🔴 High Risk
+🔴 HIGH RISK
 
 Multiple significant indicators may indicate a potentially dangerous resource.
 
@@ -601,10 +1072,22 @@ The agent should explain the indicators that contributed to the assessment.
 
 The system is designed for:
 
-Security awareness
-Defensive analysis
-Cybersecurity education
-Preliminary threat assessment
+🔹 Security Awareness
+
+Helping users understand cybersecurity risks.
+
+🔹 Defensive Analysis
+
+Supporting defensive security analysis.
+
+🔹 Cybersecurity Education
+
+Teaching security concepts through practical examples.
+
+🔹 Preliminary Threat Assessment
+
+Providing an initial assessment based on available information.
+
 4. Safe File Handling
 
 Untrusted files should be analyzed without directly executing them on the production server.
@@ -617,18 +1100,18 @@ Security-sensitive decisions should not rely solely on automated analysis.
 
 The AI Cybersecurity Agent extends the existing security utilities of the platform.
 
-              CYBERSECURITY PLATFORM
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-   Cyber Awareness  Phishing      Password Security
-                                      │
-                                      ▼
-                                Password Generator
-        │
-        ├──────────────┬─────────────────────┐
-        ▼              ▼                     ▼
-   Port Scanner    URL Analysis        File Analysis
+                 CYBERSECURITY PLATFORM
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+   Cyber Awareness    Phishing        Password Security
+                                             │
+                                             ▼
+                                      Password Generator
+                                             │
+        ┌────────────────┬────────────────────┐
+        ▼                ▼                    ▼
+   Port Scanner     URL Analysis        File Analysis
                                              │
                                              ▼
                                       APK Analysis
@@ -638,27 +1121,30 @@ The AI Cybersecurity Agent extends the existing security utilities of the platfo
                                              │
                                              ▼
                                   🤖 AI Cybersecurity
-                                        Agent
+                                         Agent
                                              │
                                              ▼
-                                  Risk Assessment
+                                      Risk Assessment
                                              │
                                              ▼
-                              Security Recommendation
+                                  Security Recommendation
 🚀 AI Cybersecurity Development Roadmap
 Phase 1 — AI Agent Foundation
+Completed Planning
  Define AI Cybersecurity Agent concept
  Define primary objectives
  Define threat-analysis workflow
  Define risk-assessment approach
 Phase 2 — Intelligent Threat Analysis
- AI-powered URL threat analysis
- AI scam indicator detection
+Planned Development
+ AI-assisted URL threat analysis
+ AI scam-indicator detection
  AI phishing analysis
  AI-assisted file threat analysis
  AI-assisted APK security analysis
  Threat-intelligence integration
 Phase 3 — AI Security Assistant
+Planned Development
  AI-generated security explanations
  Context-aware security recommendations
  Security report generation
@@ -668,12 +1154,27 @@ Phase 3 — AI Security Assistant
 
 The AI Cybersecurity Agent is an educational and defensive cybersecurity component.
 
+Automated Analysis Limitations
+
 Automated security analysis can produce:
 
-False positives
-False negatives
-Incomplete results
-Outdated threat information
+🔹 False Positives
+
+A legitimate resource may sometimes be classified as suspicious.
+
+🔹 False Negatives
+
+A malicious resource may sometimes remain undetected.
+
+🔹 Incomplete Results
+
+Available information may not be sufficient for a complete assessment.
+
+🔹 Outdated Threat Information
+
+Threat intelligence may change over time.
+
+Important
 
 The absence of a detected threat does not guarantee that a resource is safe.
 
@@ -683,26 +1184,81 @@ Users should use additional trusted security resources and professional security
 
 🛠️ Technologies Used
 Frontend
+Languages
 HTML5
+
+Used to structure the web application.
+
 CSS3
+
+Used to design and style the user interface.
+
 JavaScript
+
+Used for client-side interactions and dynamic functionality.
+
 Backend
+Technologies
 Python
+
+Primary backend programming language.
+
 Flask
+
+Web framework used to build the application.
+
 Security & Analysis
-Python socket
-SHA-256 hashing
-Static file analysis
-APK archive inspection
-URL heuristics
-TCP port scanning
-VirusTotal API integration
-AI-assisted threat analysis
+Security Technologies
+Python Socket
+
+Used for TCP network and port-scanning functionality.
+
+SHA-256 Hashing
+
+Used for file identification and integrity analysis.
+
+Static File Analysis
+
+Used to inspect uploaded files without executing them.
+
+APK Archive Inspection
+
+Used to inspect Android application packages.
+
+URL Heuristics
+
+Used to identify potentially suspicious URL characteristics.
+
+TCP Port Scanning
+
+Used to demonstrate basic network-security concepts.
+
+VirusTotal API
+
+Used for threat-intelligence integration when configured.
+
+AI-Assisted Threat Analysis
+
+Planned capability for intelligent cybersecurity analysis.
+
 Development & Deployment
+Development Tools
 Git
+
+Used for version control.
+
 GitHub
+
+Used for source-code management and project collaboration.
+
 Visual Studio Code
+
+Used as the primary development environment.
+
 Render
+
+Used for web application deployment.
+
 📦 Python Dependencies
 
 The project currently uses packages such as:
@@ -710,8 +1266,9 @@ The project currently uses packages such as:
 Flask
 gunicorn
 requests
+Python Standard Library
 
-Python standard-library modules are also used for functionality such as:
+The project also uses standard-library modules such as:
 
 socket
 hashlib
@@ -746,10 +1303,47 @@ cybersecurity-toolkit/
     ├── portscan.html
     ├── url_analyzer.html
     └── apk_analyzer.html
+Project Structure Notes
+app.py
+
+Main Flask application.
+
+password_security.py
+
+Password-security functionality.
+
+port_scanner.py
+
+TCP port-scanning functionality.
+
+url_analyzer.py
+
+URL-analysis functionality.
+
+file_analyzer.py
+
+File-analysis functionality.
+
+apk_analyzer.py
+
+APK static-analysis functionality.
+
+templates/
+
+Contains the application's HTML templates.
+
+static/
+
+Contains CSS and other static assets.
+
+uploads/
+
+Temporary location for uploaded files when required.
 
 The project structure may change as additional security features and improvements are developed.
 
 🔄 How the Platform Works
+Overall Platform Workflow
                          USER
                            │
                            ▼
@@ -765,105 +1359,264 @@ The project structure may change as additional security features and improvement
                                   Strength       Generator
                                    Checker
         │
-        └──────────────────┬──────────────────┐
-                           │                  │
-                           ▼                  ▼
-                    🔎 Port Scanner     🌐 URL Analyzer
-                                             │
-                                             ▼
-                                      📄 File Analyzer
-                                             │
-                                             ▼
-                                      📱 APK Analyzer
-                                             │
-                                             ▼
-                                      🦠 VirusTotal
-                                             │
-                                             ▼
-                                  🤖 AI Cybersecurity
-                                        Agent
+        └──────────────────┬──────────────────────┐
+                           │                      │
+                           ▼                      ▼
+                    🔎 Port Scanner        🌐 URL Analyzer
+                                                  │
+                                                  ▼
+                                           📄 File Analyzer
+                                                  │
+                                                  ▼
+                                           📱 APK Analyzer
+                                                  │
+                                                  ▼
+                                          🦠 VirusTotal
+                                                  │
+                                                  ▼
+                                      🤖 AI Cybersecurity
+                                             Agent
 🔒 Security & Ethical Use
 
-This project is created for cybersecurity education, defensive learning, and authorized security testing.
+This project is created for:
+
+Educational Purposes
+
+Cybersecurity education and awareness.
+
+Defensive Learning
+
+Learning defensive security concepts and analysis techniques.
+
+Authorized Security Testing
+
+Testing only systems for which permission has been obtained.
+
+Security Awareness
+
+Helping users understand common cyber threats.
+
+Security Analysis
+
+Performing controlled analysis of authorized resources.
+
+⚠️ Authorized Use Only
 
 The tools should only be used:
 
-On systems you own
-In your own laboratory environment
-With explicit authorization
-For educational purposes
-For defensive security analysis
+🔹 On Systems You Own
+
+Use security tools on systems under your control.
+
+🔹 In Your Own Laboratory
+
+Use controlled environments for cybersecurity experimentation.
+
+🔹 With Explicit Authorization
+
+Obtain permission before testing systems belonging to others.
+
+🔹 For Educational Purposes
+
+Use the platform to learn cybersecurity concepts.
+
+🔹 For Defensive Security Analysis
+
+Use the platform for legitimate defensive purposes.
 
 Never use security tools to access, scan, attack, interfere with, or collect information from systems without permission.
 
-Important
+Important Project Limitation
 
-The platform is an educational project and should not be treated as a replacement for professional security tools, malware-analysis environments, or security assessments.
+The platform is an educational project and should not be treated as a replacement for:
+
+🔹 Professional Security Tools
+
+Commercial or professional-grade cybersecurity solutions.
+
+🔹 Malware Analysis Environments
+
+Dedicated sandboxed malware-analysis systems.
+
+🔹 Professional Penetration Testing
+
+Authorized professional security assessments.
+
+🔹 Incident Response
+
+Professional incident-response services.
+
+🔹 Security Assessments
+
+Comprehensive professional security audits.
 
 🎨 User Interface
 
-The platform uses a clean and beginner-friendly interface designed around a:
+The platform uses a clean and beginner-friendly interface.
 
-Light
-Modern
-Educational
-Cybersecurity-focused
+Design Characteristics
+💡 Light
 
-visual style.
+A light visual interface designed for readability.
 
-The goal is to make cybersecurity concepts understandable to beginners while providing practical demonstrations.
+✨ Modern
+
+A modern web application design.
+
+🎓 Educational
+
+Designed to make cybersecurity concepts easier for beginners.
+
+🛡️ Cybersecurity-Focused
+
+The interface is centered around cybersecurity learning and security analysis.
+
+UI Goal
+
+The goal is to make cybersecurity concepts understandable to beginners while providing practical demonstrations and security-analysis utilities.
 
 🌱 Learning Outcomes
 
 Through this project, I am developing practical knowledge of:
 
-Web application development
-Python programming
+💻 Software Development
+Web Application Development
+
+Building and deploying web applications.
+
+Python Programming
+
+Developing backend functionality using Python.
+
 Flask
+
+Building web applications using the Flask framework.
+
 HTML
+
+Creating web-page structure.
+
 CSS
+
+Designing and styling web interfaces.
+
 JavaScript
-Cybersecurity fundamentals
-Network fundamentals
-TCP ports
-Port scanning
-Password security
-Phishing concepts
-URL analysis
-File analysis
-APK static analysis
-SHA-256 hashing
-Threat intelligence
+
+Adding client-side functionality and interactions.
+
+🛡️ Cybersecurity
+Cybersecurity Fundamentals
+
+Understanding fundamental security concepts.
+
+Network Fundamentals
+
+Understanding basic networking concepts.
+
+TCP Ports
+
+Understanding network ports and services.
+
+Port Scanning
+
+Learning basic port-scanning concepts.
+
+Password Security
+
+Understanding password-strength principles.
+
+Phishing Concepts
+
+Understanding phishing attacks and awareness.
+
+URL Analysis
+
+Analyzing potentially suspicious URLs.
+
+File Analysis
+
+Performing basic static file analysis.
+
+APK Static Analysis
+
+Inspecting Android application packages.
+
+SHA-256 Hashing
+
+Using cryptographic hashes for file identification.
+
+Threat Intelligence
+
+Understanding external threat-intelligence information.
+
+Security-Aware Application Development
+
+Building applications with security considerations.
+
+🔧 APIs & Development Tools
 REST APIs
+
+Working with application programming interfaces.
+
 Git
+
+Managing source-code versions.
+
 GitHub
-Web deployment
-AI-assisted cybersecurity
-Security-aware application development
+
+Hosting and managing project source code.
+
+Visual Studio Code
+
+Developing and debugging the project.
+
+Web Deployment
+
+Deploying web applications.
+
+Render
+
+Hosting the application online.
+
+AI-Assisted Cybersecurity
+
+Exploring AI-assisted security analysis.
+
 🔮 Future Improvements
-
-Planned improvements include:
-
+🔐 User Management
 User authentication
+User accounts
+User progress tracking
+🎓 Cybersecurity Education
 Cybersecurity quizzes
 Security awareness score
 More phishing examples
-Password-security recommendations
 Network-security learning modules
 Interactive cybersecurity challenges
-Security news section
-User progress tracking
-Improved accessibility
-Responsive mobile design
+🔑 Password Security
+Password-security recommendations
+Improved password analysis
+Additional password-security education
+📱 Security Analysis
 Expanded APK analysis
 Additional file-analysis capabilities
 More detailed security reports
 Improved logging and audit capabilities
+🌐 Platform Improvements
+Security news section
+Improved accessibility
+Responsive mobile design
+🤖 AI Improvements
 Advanced AI cybersecurity capabilities
+Intelligent security explanations
+Context-aware recommendations
+Automated security reports
+Improved threat analysis
 🚀 Future Vision
 
 The long-term goal of this project is to evolve the platform into a practical cybersecurity learning environment where beginners can learn security concepts through interactive tools, controlled demonstrations, and AI-assisted security analysis.
 
+Long-Term Development Path
 Cybersecurity Awareness
           ↓
 Security Fundamentals
@@ -876,21 +1629,76 @@ AI-Assisted Security Analysis
           ↓
 Defensive Security Learning
 🌐 Live Application
-
 Cybersecurity Awareness Platform Kit
+Live Deployment
 
 https://cybersecurity-platformandkit.onrender.com/
+
+Future Domain
 
 A custom domain is planned for a future deployment update.
 
 👨‍💻 Author
-
 Durga Prasad I
+Profile
 
 CSE Student | Software Developer | AI & Cybersecurity Enthusiast
 
 📜 License
 
-This project is intended for educational and cybersecurity-awareness purposes.
+This project is intended for:
 
-Use the included security tools responsibly and only against systems and files that you are authorized to analyze.
+Educational Use
+
+Learning cybersecurity and software development.
+
+Cybersecurity Awareness
+
+Understanding common digital threats and security practices.
+
+Authorized Security Analysis
+
+Using the included tools only against systems and files that the user is authorized to analyze.
+
+Use the included security tools responsibly and only against systems, networks, applications, and files that you are authorized to analyze.
+
+⭐ Project Summary
+Cybersecurity Awareness Platform Kit
+
+A beginner-friendly cybersecurity platform combining:
+
+🛡️ Cyber Awareness
+
+Cybersecurity education and safe digital practices.
+
+🎣 Phishing Education
+
+Controlled phishing-awareness demonstrations.
+
+🔐 Password Security
+
+Password-strength analysis and password-generation concepts.
+
+🔎 Port Scanning
+
+Basic TCP network-security learning.
+
+🌐 URL Analysis
+
+Local URL heuristics and threat-intelligence integration.
+
+📄 File Analysis
+
+Static file security analysis and SHA-256 hashing.
+
+📱 APK Analysis
+
+Android APK static security inspection.
+
+🦠 Threat Intelligence
+
+VirusTotal integration for additional security information.
+
+🤖 AI Cybersecurity Agent
+
+An evolving AI-assisted security-analysis direction.
