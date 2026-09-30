@@ -1,147 +1,1595 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Cyber Awareness & Best Practices</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cyber Awareness | CyberShield AI</title>
+
     <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+
+        /* =========================================================
+           CYBERSHIELD AI - AWARENESS PAGE
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f9ff 0%,
+                    #eef2ff 45%,
+                    #f8faff 100%
+                );
+            color: #172033;
+            line-height: 1.7;
+        }
+
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .awareness-header {
+            position: relative;
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #111936,
+                    #1d2854 55%,
+                    #312e81
+                );
+
+            color: white;
+            padding: 65px 20px 75px;
+
+            text-align: center;
+
+            box-shadow:
+                0 12px 35px rgba(15, 23, 42, 0.20);
+        }
+
+
+        .awareness-header::before {
+            content: "";
+            position: absolute;
+
+            width: 320px;
+            height: 320px;
+
+            border-radius: 50%;
+
+            background: rgba(99, 102, 241, 0.15);
+
+            top: -180px;
+            left: -100px;
+        }
+
+
+        .awareness-header::after {
+            content: "";
+            position: absolute;
+
+            width: 360px;
+            height: 360px;
+
+            border-radius: 50%;
+
+            background: rgba(139, 92, 246, 0.12);
+
+            right: -120px;
+            bottom: -220px;
+        }
+
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+
+            max-width: 1000px;
+            margin: auto;
+        }
+
+
+        .shield-icon {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            font-size: 38px;
+
+            box-shadow:
+                0 12px 30px rgba(99, 102, 241, 0.35);
+        }
+
+
+        .awareness-header h1 {
+            margin: 0;
+
+            font-size: clamp(34px, 5vw, 56px);
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+        }
+
+
+        .awareness-header .subtitle {
+            margin: 12px auto 0;
+
+            max-width: 700px;
+
+            font-size: 19px;
+
+            color: #dbe4ff;
+        }
+
+
+        .header-badge {
+            display: inline-block;
+
+            margin-top: 25px;
+
+            padding: 8px 16px;
+
+            border-radius: 999px;
+
+            background: rgba(255,255,255,0.10);
+
+            border: 1px solid rgba(255,255,255,0.20);
+
+            font-size: 14px;
+
+            color: #e0e7ff;
+        }
+
+
+        /* =========================================================
+           PAGE CONTAINER
+           ========================================================= */
+
+        .awareness-container {
+            width: min(1180px, 92%);
+
+            margin: 0 auto;
+
+            padding: 55px 0 70px;
+        }
+
+
+        /* =========================================================
+           INTRO
+           ========================================================= */
+
+        .intro-card {
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 35px;
+
+            margin-bottom: 45px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 12px 35px rgba(15, 23, 42, 0.07);
+        }
+
+
+        .intro-card h2 {
+            margin-top: 0;
+
+            color: #1e293b;
+
+            font-size: 30px;
+        }
+
+
+        .intro-card p {
+            color: #64748b;
+
+            font-size: 17px;
+
+            max-width: 950px;
+        }
+
+
+        /* =========================================================
+           SECTION HEADER
+           ========================================================= */
+
+        .section-heading {
+            margin: 55px 0 25px;
+        }
+
+
+        .section-heading .eyebrow {
+            color: #6366f1;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            font-size: 13px;
+
+            font-weight: 800;
+        }
+
+
+        .section-heading h2 {
+            margin: 5px 0;
+
+            font-size: 31px;
+
+            color: #172033;
+        }
+
+
+        .section-heading p {
+            margin: 0;
+
+            color: #64748b;
+
+            max-width: 750px;
+        }
+
+
+        /* =========================================================
+           QUICK SECURITY PRINCIPLES
+           ========================================================= */
+
+        .principles-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .principle-card {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 28px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 8px 25px rgba(15, 23, 42, 0.06);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 16px 35px rgba(15, 23, 42, 0.11);
+        }
+
+
+        .principle-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background: #eef2ff;
+
+            font-size: 25px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .principle-card h3 {
+            margin: 0 0 8px;
+
+            font-size: 20px;
+        }
+
+
+        .principle-card p {
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================================================
+           CONTENT GRID
+           ========================================================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 24px;
+        }
+
+
+        .awareness-card {
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 8px 28px rgba(15, 23, 42, 0.06);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .awareness-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 15px 35px rgba(15, 23, 42, 0.10);
+        }
+
+
+        .card-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            margin-bottom: 16px;
+        }
+
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background: #eef2ff;
+
+            font-size: 24px;
+        }
+
+
+        .card-heading h2 {
+            margin: 0;
+
+            font-size: 22px;
+
+            color: #1e293b;
+        }
+
+
+        .awareness-card p {
+            color: #64748b;
+
+            margin-top: 8px;
+        }
+
+
+        /* =========================================================
+           LISTS
+           ========================================================= */
+
+        .security-list {
+            list-style: none;
+
+            padding: 0;
+
+            margin: 18px 0 0;
+        }
+
+
+        .security-list li {
+            position: relative;
+
+            padding: 11px 0 11px 32px;
+
+            color: #475569;
+
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+
+        .security-list li:last-child {
+            border-bottom: none;
+        }
+
+
+        .security-list li::before {
+            content: "✓";
+
+            position: absolute;
+
+            left: 0;
+            top: 11px;
+
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+            font-size: 13px;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================================
+           PHISHING FEATURE
+           ========================================================= */
+
+        .phishing-section {
+            margin-top: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7ed,
+                    #fff1f2
+                );
+
+            border: 1px solid #fed7aa;
+        }
+
+
+        .phishing-section .card-icon {
+            background: #ffedd5;
+        }
+
+
+        .phishing-warning {
+            margin-top: 22px;
+
+            padding: 18px 20px;
+
+            border-radius: 14px;
+
+            background: #fff;
+
+            border-left: 5px solid #f97316;
+
+            color: #7c2d12;
+        }
+
+
+        /* =========================================================
+           DANGER CARDS
+           ========================================================= */
+
+        .danger-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7f7,
+                    #fff
+                );
+
+            border-color: #fecaca;
+        }
+
+
+        .danger-card .card-icon {
+            background: #fee2e2;
+        }
+
+
+        .danger-card .security-list li::before {
+            content: "!";
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+
+        /* =========================================================
+           DO / DON'T
+           ========================================================= */
+
+        .dos-donts {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .do-box,
+        .dont-box {
+            padding: 25px;
+
+            border-radius: 18px;
+        }
+
+
+        .do-box {
+            background: #f0fdf4;
+
+            border: 1px solid #bbf7d0;
+        }
+
+
+        .dont-box {
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+        }
+
+
+        .do-box h3,
+        .dont-box h3 {
+            margin-top: 0;
+
+            font-size: 21px;
+        }
+
+
+        .do-box h3 {
+            color: #15803d;
+        }
+
+
+        .dont-box h3 {
+            color: #be123c;
+        }
+
+
+        .do-box ul,
+        .dont-box ul {
+            padding-left: 20px;
+
+            margin-bottom: 0;
+        }
+
+
+        .do-box li,
+        .dont-box li {
+            margin: 8px 0;
+
+            color: #475569;
+        }
+
+
+        /* =========================================================
+           INCIDENT RESPONSE / ACTION STEPS
+           ========================================================= */
+
+        .action-card {
+            margin-top: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f5f3ff
+                );
+
+            border: 1px solid #c7d2fe;
+        }
+
+
+        .action-steps {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+
+        .action-step {
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 20px;
+
+            border: 1px solid #e0e7ff;
+
+            text-align: center;
+        }
+
+
+        .step-number {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 12px;
+
+            border-radius: 50%;
+
+            background: #4f46e5;
+
+            color: white;
+
+            font-weight: 800;
+        }
+
+
+        .action-step h3 {
+            margin: 5px 0;
+
+            font-size: 17px;
+        }
+
+
+        .action-step p {
+            font-size: 14px;
+
+            color: #64748b;
+        }
+
+
+        /* =========================================================
+           CONCLUSION
+           ========================================================= */
+
+        .conclusion {
+            margin-top: 45px;
+
+            padding: 42px;
+
+            border-radius: 24px;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #312e81,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            box-shadow:
+                0 15px 40px rgba(79, 70, 229, 0.25);
+        }
+
+
+        .conclusion h2 {
+            margin-top: 0;
+
+            font-size: 30px;
+        }
+
+
+        .conclusion p {
+            max-width: 800px;
+
+            margin: auto;
+
+            color: #e0e7ff;
+
+            font-size: 17px;
+        }
+
+
+        .conclusion-tagline {
+            margin-top: 25px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .awareness-footer {
+            text-align: center;
+
+            padding: 25px 20px;
+
+            background: #111827;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+        }
+
+
+        .awareness-footer strong {
+            color: white;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE DESIGN
+           ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .principles-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .action-steps {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .awareness-header {
+                padding: 50px 18px 60px;
+            }
+
+
+            .awareness-container {
+                width: 94%;
+
+                padding-top: 35px;
+            }
+
+
+            .principles-grid,
+            .content-grid,
+            .dos-donts {
+                grid-template-columns: 1fr;
+            }
+
+
+            .action-steps {
+                grid-template-columns: 1fr;
+            }
+
+
+            .intro-card,
+            .awareness-card,
+            .conclusion {
+                padding: 25px;
+            }
+
+
+            .section-heading h2 {
+                font-size: 27px;
+            }
+
+
+            .awareness-header h1 {
+                font-size: 35px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<header class="header">
-    <h1>🛡️ Cybersecurity Awareness</h1>
-    <p>Protecting Data, Identity & Digital Life</p>
+
+<!-- =========================================================
+     HERO HEADER
+     ========================================================= -->
+
+<header class="awareness-header">
+
+    <div class="header-content">
+
+        <div class="shield-icon">
+            🛡️
+        </div>
+
+        <h1>
+            Cybersecurity Awareness
+        </h1>
+
+        <p class="subtitle">
+            Protect your data, identity, devices and digital life
+            through better cybersecurity awareness.
+        </p>
+
+        <div class="header-badge">
+            🧠 Learn • Recognize • Protect • Respond
+        </div>
+
+    </div>
+
 </header>
 
-<div class="content-container">
 
-    <!-- WHAT IS CYBERSECURITY -->
-    <section class="card">
-        <h2>What is Cybersecurity?</h2>
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="awareness-container">
+
+
+    <!-- INTRODUCTION -->
+
+    <section class="intro-card">
+
+        <h2>
+            🛡️ What is Cybersecurity?
+        </h2>
+
         <p>
-            Cybersecurity is the practice of protecting computers, networks, servers,
-            mobile devices, and data from unauthorized access, attacks, damage, or theft.
-            It ensures confidentiality, integrity, and availability of information.
+            Cybersecurity is the practice of protecting computers,
+            networks, servers, mobile devices, and data from
+            unauthorized access, attacks, damage, or theft.
+            It helps maintain the confidentiality, integrity,
+            and availability of information.
         </p>
+
     </section>
 
-    <!-- WHY IMPORTANT -->
-    <section class="card">
-        <h2>Why is Cybersecurity Important?</h2>
-        <ul>
-            <li>Protects personal and financial information</li>
-            <li>Prevents identity theft and fraud</li>
-            <li>Secures business and government systems</li>
-            <li>Maintains trust in digital platforms</li>
-            <li>Prevents data loss and service downtime</li>
-        </ul>
-    </section>
 
-    <!-- DATA PROTECTION -->
-    <section class="card">
-        <h2>How to Protect Your Data</h2>
-        <ul>
-            <li>Always keep software and operating systems updated</li>
-            <li>Use antivirus and firewall protection</li>
-            <li>Backup important data regularly</li>
-            <li>Encrypt sensitive files and drives</li>
-            <li>Avoid using public Wi-Fi for sensitive transactions</li>
-        </ul>
-    </section>
+    <!-- =====================================================
+         QUICK SECURITY PRINCIPLES
+         ===================================================== -->
 
-    <!-- PASSWORD PROTECTION -->
-    <section class="card">
-        <h2>Password Protection Best Practices</h2>
-        <ul>
-            <li>Use strong passwords (uppercase, lowercase, numbers, symbols)</li>
-            <li>Minimum password length: 12 characters</li>
-            <li>Never reuse the same password</li>
-            <li>Use a password manager</li>
-            <li>Enable two-factor authentication (2FA)</li>
-        </ul>
-    </section>
+    <div class="section-heading">
 
-    <!-- BAD PRACTICES -->
-    <section class="card danger">
-        <h2>Bad Cyber Practices (Do NOT Do This)</h2>
-        <ul>
-            <li>Clicking unknown or suspicious links</li>
-            <li>Sharing OTPs or passwords</li>
-            <li>Using weak passwords like <b>123456</b></li>
-            <li>Installing cracked or pirated software</li>
-            <li>Ignoring security warnings</li>
-        </ul>
-    </section>
+        <span class="eyebrow">
+            Start Here
+        </span>
 
-    <!-- PHISHING -->
-    <section class="card">
-        <h2>Phishing & Social Engineering</h2>
+        <h2>
+            Essential Security Principles
+        </h2>
+
         <p>
-            Phishing is a cyber attack where attackers trick users into revealing
-            sensitive information by pretending to be trusted entities via emails,
-            messages, or fake websites.
+            Good cybersecurity begins with a few simple habits
+            that can significantly reduce everyday digital risks.
         </p>
-        <ul>
-            <li>Always verify sender email addresses</li>
-            <li>Check website URLs carefully</li>
-            <li>Do not click urgent or threatening messages</li>
-            <li>Never share credentials through email or SMS</li>
-        </ul>
-    </section>
 
-    <!-- LOSSES -->
-    <section class="card danger">
-        <h2>Losses Due to Cyber Attacks</h2>
-        <ul>
-            <li>Financial loss and bank fraud</li>
-            <li>Loss of personal identity</li>
-            <li>Business reputation damage</li>
-            <li>Data leakage and privacy violations</li>
-            <li>Legal consequences and penalties</li>
-        </ul>
-    </section>
+    </div>
 
-    <!-- DOS AND DONTS -->
-    <section class="card">
-        <h2>Cybersecurity Do’s and Don’ts</h2>
-        <div class="two-column">
-            <div>
-                <h3>✔ Do’s</h3>
-                <ul>
-                    <li>Use licensed software</li>
-                    <li>Lock devices when not in use</li>
-                    <li>Report suspicious activities</li>
-                    <li>Educate yourself regularly</li>
-                </ul>
+
+    <section class="principles-grid">
+
+
+        <div class="principle-card">
+
+            <div class="principle-icon">
+                🔐
             </div>
-            <div>
-                <h3>❌ Don’ts</h3>
-                <ul>
-                    <li>Do not trust unknown sources</li>
-                    <li>Do not share personal data publicly</li>
-                    <li>Do not ignore updates</li>
-                    <li>Do not use unsecured websites</li>
-                </ul>
-            </div>
+
+            <h3>
+                Protect Your Accounts
+            </h3>
+
+            <p>
+                Use strong, unique passwords and enable
+                multi-factor authentication whenever possible.
+            </p>
+
         </div>
+
+
+        <div class="principle-card">
+
+            <div class="principle-icon">
+                🎣
+            </div>
+
+            <h3>
+                Think Before You Click
+            </h3>
+
+            <p>
+                Be careful with unexpected links, attachments,
+                messages and requests for sensitive information.
+            </p>
+
+        </div>
+
+
+        <div class="principle-card">
+
+            <div class="principle-icon">
+                🔄
+            </div>
+
+            <h3>
+                Keep Systems Updated
+            </h3>
+
+            <p>
+                Keep your operating system, applications and
+                security software updated.
+            </p>
+
+        </div>
+
+
     </section>
 
-    <!-- CONCLUSION -->
-    <section class="card highlight">
-        <h2>Conclusion</h2>
+
+    <!-- =====================================================
+         WHY CYBERSECURITY MATTERS
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Why It Matters
+        </span>
+
+        <h2>
+            Why is Cybersecurity Important?
+        </h2>
+
         <p>
-            Cybersecurity awareness is essential in today’s digital world.
-            A single mistake can lead to serious consequences.
-            Being alert, educated, and cautious can protect individuals,
-            organizations, and society from cyber threats.
+            Cybersecurity helps individuals and organizations
+            protect valuable information and maintain trust
+            in digital systems.
         </p>
+
+    </div>
+
+
+    <section class="awareness-card">
+
+        <div class="card-heading">
+
+            <div class="card-icon">
+                🌐
+            </div>
+
+            <h2>
+                Key Benefits
+            </h2>
+
+        </div>
+
+        <ul class="security-list">
+
+            <li>
+                Protects personal and financial information
+            </li>
+
+            <li>
+                Helps prevent identity theft and fraud
+            </li>
+
+            <li>
+                Secures business and government systems
+            </li>
+
+            <li>
+                Maintains trust in digital platforms
+            </li>
+
+            <li>
+                Helps reduce data loss and service downtime
+            </li>
+
+        </ul>
+
     </section>
 
-</div>
 
-<footer class="footer">
-    <p>⚠️ For Educational Purposes Only | Cybersecurity Toolkit</p>
+    <!-- =====================================================
+         DATA + PASSWORD PROTECTION
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Protect Yourself
+        </span>
+
+        <h2>
+            Data & Account Protection
+        </h2>
+
+        <p>
+            Follow practical security habits when managing
+            your information, devices and online accounts.
+        </p>
+
+    </div>
+
+
+    <section class="content-grid">
+
+
+        <!-- DATA PROTECTION -->
+
+        <article class="awareness-card">
+
+            <div class="card-heading">
+
+                <div class="card-icon">
+                    💾
+                </div>
+
+                <h2>
+                    How to Protect Your Data
+                </h2>
+
+            </div>
+
+            <ul class="security-list">
+
+                <li>
+                    Keep software and operating systems updated
+                </li>
+
+                <li>
+                    Use antivirus and firewall protection
+                </li>
+
+                <li>
+                    Backup important data regularly
+                </li>
+
+                <li>
+                    Encrypt sensitive files and drives
+                </li>
+
+                <li>
+                    Avoid public Wi-Fi for sensitive transactions
+                </li>
+
+            </ul>
+
+        </article>
+
+
+        <!-- PASSWORD PROTECTION -->
+
+        <article class="awareness-card">
+
+            <div class="card-heading">
+
+                <div class="card-icon">
+                    🔑
+                </div>
+
+                <h2>
+                    Password Protection
+                </h2>
+
+            </div>
+
+            <ul class="security-list">
+
+                <li>
+                    Use strong passwords with multiple character types
+                </li>
+
+                <li>
+                    Prefer longer passwords or passphrases
+                </li>
+
+                <li>
+                    Never reuse the same password across important accounts
+                </li>
+
+                <li>
+                    Consider using a reputable password manager
+                </li>
+
+                <li>
+                    Enable two-factor authentication (2FA)
+                </li>
+
+            </ul>
+
+        </article>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         PHISHING
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Stay Alert
+        </span>
+
+        <h2>
+            Phishing & Social Engineering
+        </h2>
+
+        <p>
+            Attackers may use deception and urgency to convince
+            people to reveal information or perform unsafe actions.
+        </p>
+
+    </div>
+
+
+    <section class="awareness-card phishing-section">
+
+        <div class="card-heading">
+
+            <div class="card-icon">
+                🎣
+            </div>
+
+            <h2>
+                Recognize Phishing Attempts
+            </h2>
+
+        </div>
+
+        <p>
+            Phishing is a cyber attack where attackers try to
+            trick users into revealing sensitive information by
+            pretending to be trusted entities through emails,
+            messages or fake websites.
+        </p>
+
+
+        <ul class="security-list">
+
+            <li>
+                Verify sender email addresses and identities
+            </li>
+
+            <li>
+                Check website URLs carefully before entering information
+            </li>
+
+            <li>
+                Be cautious with urgent or threatening messages
+            </li>
+
+            <li>
+                Never share credentials through unexpected email or SMS requests
+            </li>
+
+        </ul>
+
+
+        <div class="phishing-warning">
+
+            <strong>
+                ⚠️ Remember:
+            </strong>
+
+            Don't allow urgency or fear to make the security
+            decision for you. Stop, verify and then act.
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BAD PRACTICES
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Avoid These
+        </span>
+
+        <h2>
+            Common Bad Cyber Practices
+        </h2>
+
+        <p>
+            Small careless actions can create opportunities
+            for attackers.
+        </p>
+
+    </div>
+
+
+    <section class="awareness-card danger-card">
+
+        <div class="card-heading">
+
+            <div class="card-icon">
+                🚨
+            </div>
+
+            <h2>
+                Do NOT Do This
+            </h2>
+
+        </div>
+
+        <ul class="security-list">
+
+            <li>
+                Click unknown or suspicious links
+            </li>
+
+            <li>
+                Share OTPs, passwords or authentication codes
+            </li>
+
+            <li>
+                Use extremely weak passwords such as
+                <strong>123456</strong>
+            </li>
+
+            <li>
+                Install cracked or pirated software
+            </li>
+
+            <li>
+                Ignore important security warnings
+            </li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOSSES
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Understand The Impact
+        </span>
+
+        <h2>
+            Potential Consequences of Cyber Attacks
+        </h2>
+
+        <p>
+            Cyber incidents can affect individuals,
+            organizations and their digital assets in different ways.
+        </p>
+
+    </div>
+
+
+    <section class="awareness-card danger-card">
+
+        <div class="card-heading">
+
+            <div class="card-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Possible Losses
+            </h2>
+
+        </div>
+
+        <ul class="security-list">
+
+            <li>
+                Financial loss and banking fraud
+            </li>
+
+            <li>
+                Loss or misuse of personal identity
+            </li>
+
+            <li>
+                Business reputation damage
+            </li>
+
+            <li>
+                Data leakage and privacy violations
+            </li>
+
+            <li>
+                Legal consequences and penalties
+            </li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- =====================================================
+         DO'S AND DON'TS
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Quick Checklist
+        </span>
+
+        <h2>
+            Cybersecurity Do's & Don'ts
+        </h2>
+
+        <p>
+            Keep these simple rules in mind during everyday
+            digital activities.
+        </p>
+
+    </div>
+
+
+    <section class="dos-donts">
+
+
+        <div class="do-box">
+
+            <h3>
+                ✔ Do's
+            </h3>
+
+            <ul>
+
+                <li>
+                    Use legitimate and trusted software
+                </li>
+
+                <li>
+                    Lock devices when they are not in use
+                </li>
+
+                <li>
+                    Report suspicious activities
+                </li>
+
+                <li>
+                    Continue learning about cybersecurity
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="dont-box">
+
+            <h3>
+                ❌ Don'ts
+            </h3>
+
+            <ul>
+
+                <li>
+                    Do not blindly trust unknown sources
+                </li>
+
+                <li>
+                    Do not share personal information publicly
+                </li>
+
+                <li>
+                    Do not ignore important security updates
+                </li>
+
+                <li>
+                    Do not enter sensitive information on suspicious websites
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================================
+         WHAT TO DO IF SOMETHING LOOKS SUSPICIOUS
+         ===================================================== -->
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            Take Action
+        </span>
+
+        <h2>
+            What Should You Do If Something Looks Suspicious?
+        </h2>
+
+        <p>
+            Don't panic. Follow a simple sequence before taking
+            further action.
+        </p>
+
+    </div>
+
+
+    <section class="awareness-card action-card">
+
+
+        <div class="action-steps">
+
+
+            <div class="action-step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Stop
+                </h3>
+
+                <p>
+                    Don't immediately click, download or respond.
+                </p>
+
+            </div>
+
+
+            <div class="action-step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Check
+                </h3>
+
+                <p>
+                    Examine the sender, link, file or request carefully.
+                </p>
+
+            </div>
+
+
+            <div class="action-step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Verify
+                </h3>
+
+                <p>
+                    Confirm the request using a trusted source.
+                </p>
+
+            </div>
+
+
+            <div class="action-step">
+
+                <div class="step-number">
+                    04
+                </div>
+
+                <h3>
+                    Report
+                </h3>
+
+                <p>
+                    Report suspicious activity through the appropriate channel.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONCLUSION
+         ===================================================== -->
+
+    <section class="conclusion">
+
+        <h2>
+            🛡️ Stay Aware. Stay Secure.
+        </h2>
+
+        <p>
+            Cybersecurity awareness is essential in today's digital world.
+            A single unsafe action can create serious security risks.
+            Staying informed, cautious and prepared can help individuals
+            and organizations reduce exposure to cyber threats.
+        </p>
+
+        <div class="conclusion-tagline">
+            Learn → Analyze → Understand → Act Safely
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="awareness-footer">
+
+    <p>
+        ⚠️ <strong>CyberShield AI</strong>
+        | Cybersecurity Awareness & Security Education
+        | For Educational Purposes
+    </p>
+
 </footer>
 
+
 </body>
+
 </html>
